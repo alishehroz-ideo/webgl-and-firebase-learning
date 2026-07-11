@@ -12,8 +12,8 @@ namespace BookLab.Core.Net
         // --- Asset catalog (the picker menu of backgrounds + stickers) ---
         public static string Catalog() => $"{BaseUrl}/assetCatalog.json";
 
-        // --- Books ---
-        public static string AllBooks()      => $"{BaseUrl}/books.json";
-        public static string Book(string id) => $"{BaseUrl}/books/{id}.json";
+        // --- Books (per kid: /books/{kidId}/{bookId}) ---
+        public static string Books(string kidId)               => $"{BaseUrl}/books/{kidId}.json";
+        public static string Book(string kidId, string bookId) => $"{BaseUrl}/books/{kidId}/{bookId}.json";
     }
 }

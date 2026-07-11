@@ -4,9 +4,11 @@
 > Sections below map to Adeeb's required deliverable checklist, so this doc grows
 > into the final handover writeup + video script.
 >
-> **Build status:** engine done (slices 1–3: data models, Firebase REST client,
-> save/load API, image caching). Pending: UI (Main Menu / Editor / Playback),
-> WebGL build, live deploy.
+> **Build status:** engine done + wired to **LIVE Firebase** and **verified
+> end-to-end in Unity** (read catalog + per-kid books, and wrote a book back to
+> the real RTDB — no errors). Slices 1–3: data models, Firebase REST client,
+> save/load API, image caching. Project: `adeeb-booklab-07111926` (Spark/free,
+> us-central1). Pending: UI (Main Menu / Editor / Playback), WebGL build, live deploy.
 
 ---
 

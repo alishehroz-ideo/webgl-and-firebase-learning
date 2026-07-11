@@ -4,15 +4,6 @@
   },
   "hosting": {
     "public": "public",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "headers": [
-      {
-        "source": "**/*.gz",
-        "headers": [
-          { "key": "Content-Encoding", "value": "gzip" },
-          { "key": "Content-Type", "value": "application/octet-stream" }
-        ]
-      }
-    ]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   }
 }

@@ -5,9 +5,8 @@ namespace BookLab.Core.Net
     // Change the database in ONE spot here and the whole app follows.
     public static class FirebaseEndpoints
     {
-        // TODO: paste your Realtime Database URL here once the Firebase project exists.
-        //   e.g.  "https://adeeb-booklab-default-rtdb.firebaseio.com"
-        public const string BaseUrl = "https://YOUR-PROJECT-default-rtdb.firebaseio.com";
+        // Realtime Database URL for the assessment project (adeeb-booklab-07111926).
+        public const string BaseUrl = "https://adeeb-booklab-07111926-default-rtdb.firebaseio.com";
 
         // --- Asset catalog (the picker menu of backgrounds + stickers) ---
         public static string Catalog() => $"{BaseUrl}/assetCatalog.json";

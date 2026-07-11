@@ -1,0 +1,22 @@
+{
+  "id": "book_demo001",
+  "title": "My First Room",
+  "createdAt": "2026-07-11T19:30:00Z",
+  "updatedAt": "2026-07-11T19:30:00Z",
+  "coverBase64": "",
+  "pages": [
+    {
+      "backgroundId": "bg_livingroom",
+      "objects": [
+        { "assetId": "furn_sofa", "x": 0.30, "y": 0.40, "scale": 1.0, "rotation": 0, "z": 0 },
+        { "assetId": "furn_lamp", "x": 0.70, "y": 0.55, "scale": 0.8, "rotation": 0, "z": 1 }
+      ]
+    },
+    {
+      "backgroundId": "bg_garden",
+      "objects": [
+        { "assetId": "furn_tree", "x": 0.50, "y": 0.50, "scale": 1.2, "rotation": 0, "z": 0 }
+      ]
+    }
+  ]
+}

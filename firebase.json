@@ -4,6 +4,29 @@
   },
   "hosting": {
     "public": "public",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      {
+        "source": "**/*.wasm.gz",
+        "headers": [
+          { "key": "Content-Encoding", "value": "gzip" },
+          { "key": "Content-Type", "value": "application/wasm" }
+        ]
+      },
+      {
+        "source": "**/*.js.gz",
+        "headers": [
+          { "key": "Content-Encoding", "value": "gzip" },
+          { "key": "Content-Type", "value": "application/javascript" }
+        ]
+      },
+      {
+        "source": "**/*.data.gz",
+        "headers": [
+          { "key": "Content-Encoding", "value": "gzip" },
+          { "key": "Content-Type", "value": "application/octet-stream" }
+        ]
+      }
+    ]
   }
 }

@@ -44,18 +44,19 @@ namespace BookLab.Core.Net
             }
         }
 
-        // GET an image and hand back a Texture2D (AssetService downloads through this, then caches it).
-        public static async Task<Texture2D> GetTexture(string url)
+        // GET raw bytes — used for images. AssetService downloads through this, saves the
+        // bytes to disk (cache), then decodes them into a Sprite.
+        public static async Task<byte[]> GetBytes(string url)
         {
-            using (var req = UnityWebRequestTexture.GetTexture(url))
+            using (var req = UnityWebRequest.Get(url))
             {
                 await SendAsync(req);
                 if (req.result != UnityWebRequest.Result.Success)
                 {
-                    Debug.LogError($"[Firebase] IMG failed {url} → {req.responseCode} {req.error}");
+                    Debug.LogError($"[Firebase] BYTES failed {url} → {req.responseCode} {req.error}");
                     return null;
                 }
-                return DownloadHandlerTexture.GetContent(req);
+                return req.downloadHandler.data;
             }
         }
 

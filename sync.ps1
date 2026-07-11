@@ -27,14 +27,15 @@ if ($Action -eq 'push') {
     Write-Host "==> Staging changes ..."
     git add -A
 
-    if (git diff --cached --quiet; $LASTEXITCODE -eq 0) {
-        Write-Host "Nothing to commit. Working tree clean."
-    }
-    else {
+    git diff --cached --quiet
+    if ($LASTEXITCODE -ne 0) {
         $stamp = Get-Date -Format 'yyyy-MM-dd HH:mm'
         git commit -m "sync: $stamp"
         Write-Host "==> Pushing ..."
         git push
+    }
+    else {
+        Write-Host "Nothing to commit. Working tree clean."
     }
 }
 else {

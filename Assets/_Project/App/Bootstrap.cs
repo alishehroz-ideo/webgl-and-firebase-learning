@@ -9,6 +9,14 @@ namespace BookLab.App
     // Builds a Full-HD canvas that scales to any screen, then starts the app.
     public class Bootstrap : MonoBehaviour
     {
+        // Auto-start in any scene (including WebGL builds) without needing a hand-placed GameObject.
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        static void AutoStart()
+        {
+            if (FindFirstObjectByType<Bootstrap>() != null) return;   // a manual one is already in the scene
+            new GameObject("BookLabApp").AddComponent<Bootstrap>();
+        }
+
         void Start()
         {
             // Ensure an EventSystem exists so buttons receive clicks.

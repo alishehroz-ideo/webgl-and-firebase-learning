@@ -94,3 +94,9 @@ firebase-debug.log
 firebase-debug.*.log
 database-debug.log
 ui-debug.log
+
+# Firebase Hosting: public/assets/ is source; the deployed WebGL build is generated
+/public/Build/
+/public/TemplateData/
+/public/StreamingAssets/
+/public/index.html

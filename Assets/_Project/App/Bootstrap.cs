@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using BookLab.Features.MainMenu;
 
 namespace BookLab.App
@@ -10,6 +12,14 @@ namespace BookLab.App
     {
         void Start()
         {
+            // Ensure an EventSystem exists so buttons receive clicks.
+            // This project uses the new Input System, so use its UI input module.
+            if (FindFirstObjectByType<EventSystem>() == null)
+            {
+                var es = new GameObject("EventSystem", typeof(EventSystem));
+                es.AddComponent<InputSystemUIInputModule>().AssignDefaultActions();
+            }
+
             var canvasGO = new GameObject("UICanvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             var canvas = canvasGO.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;

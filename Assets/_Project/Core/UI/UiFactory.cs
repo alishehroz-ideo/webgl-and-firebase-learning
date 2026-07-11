@@ -40,6 +40,20 @@ namespace BookLab.Core.UI
             return t;
         }
 
+        public static Button Button(string name, Transform parent, string label, Color bg, int fontSize = 28)
+        {
+            var rt = Panel(name, parent, bg);
+            var btn = rt.gameObject.AddComponent<Button>();
+            btn.targetGraphic = rt.GetComponent<Image>();
+            if (!string.IsNullOrEmpty(label))
+            {
+                var t = Label("Label", rt, label, fontSize, Color.white);
+                Stretch(t.rectTransform);
+                t.raycastTarget = false;   // let the click reach the button, not the text
+            }
+            return btn;
+        }
+
         public static void Stretch(RectTransform rt)
         {
             rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;

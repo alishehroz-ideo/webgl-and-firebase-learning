@@ -2,6 +2,7 @@ using UnityEngine;
 using BookLab.Core.Events;
 using BookLab.Features.MainMenu;
 using BookLab.Features.Playback;
+using BookLab.Features.Editor;
 
 namespace BookLab.App
 {
@@ -57,7 +58,8 @@ namespace BookLab.App
 
         void OnCreate(CreateBookRequest _)
         {
-            Debug.Log("[AppRoot] Create requested — Editor screen coming in a later slice.");
+            var screen = NewScreen("EditorScreen");
+            screen.gameObject.AddComponent<EditorController>().Show(screen);
         }
     }
 }

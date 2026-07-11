@@ -7,10 +7,12 @@ using BookLab.Models;
 using BookLab.Services;
 using BookLab.App;
 
-namespace BookLab.Features.Editor
+namespace BookLab.Features.BookEditor
 {
     // Create Mode — PART 1: pick a background, then Save.
     // (Stickers + drag/scale + multiple pages come in the next slices.)
+    // NOTE: folder is "BookEditor" not "Editor" — a folder literally named "Editor"
+    // is a Unity special folder (Editor-only assembly), which would hide this at runtime.
     public class EditorController : MonoBehaviour
     {
         BookModel _book;

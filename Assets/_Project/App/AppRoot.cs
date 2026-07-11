@@ -2,7 +2,7 @@ using UnityEngine;
 using BookLab.Core.Events;
 using BookLab.Features.MainMenu;
 using BookLab.Features.Playback;
-using BookLab.Features.Editor;
+using BookLab.Features.BookEditor;
 
 namespace BookLab.App
 {

@@ -1,11 +1,11 @@
 {
   "backgrounds": {
-    "bg_livingroom": { "name": "Living Room", "url": "https://placehold.co/1920x1080/eee/555/png?text=Living+Room" },
-    "bg_garden":     { "name": "Garden",      "url": "https://placehold.co/1920x1080/dfe/363/png?text=Garden" }
+    "bg_livingroom": { "name": "Living Room", "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/living_room.png" },
+    "bg_garden":     { "name": "Garden",      "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/garden.png" }
   },
   "objects": {
-    "furn_sofa": { "name": "Sofa", "url": "https://placehold.co/400x400/transparent/553/png?text=Sofa" },
-    "furn_lamp": { "name": "Lamp", "url": "https://placehold.co/300x400/transparent/553/png?text=Lamp" },
-    "furn_tree": { "name": "Tree", "url": "https://placehold.co/400x500/transparent/363/png?text=Tree" }
+    "furn_sofa": { "name": "Sofa", "url": "https://adeeb-booklab-07111926.web.app/assets/objects/sofa.png" },
+    "furn_lamp": { "name": "Lamp", "url": "https://adeeb-booklab-07111926.web.app/assets/objects/lamp.png" },
+    "furn_tree": { "name": "Tree", "url": "https://adeeb-booklab-07111926.web.app/assets/objects/tree.png" }
   }
 }

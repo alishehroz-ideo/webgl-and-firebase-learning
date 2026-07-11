@@ -107,6 +107,7 @@ Sits in Realtime DB as a tree: `/assetCatalog` (the picker menu) and `/books/{ki
 - **`coverBase64`** to stay off paid Storage.
 - **Per-kid data with a single `demo` id** — no login to build, but structured to scale.
 - **Free Spark plan; no Cloud Functions** (see §10).
+- **Asset hosting → Firebase Hosting.** Started with a placeholder image service to prove the pipeline fast, but it **rate-limited** on repeated loads (a fresh viewer would get 404s). Migrated the images to **Firebase Hosting** — our own free CDN, same origin as the WebGL build (no CORS). Notably, the **cache masked the outage during dev** (the app kept showing images from IndexedDB even while the 3rd-party host refused new requests) — a real-world demonstration of why the caching layer matters. URLs are now stable, so swapping in real art = replace the PNG + redeploy, no DB change.
 
 ## 9. Use of AI tools
 

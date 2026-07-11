@@ -11,4 +11,4 @@ When a task needs shell/CLI work, the user wants me to actually run the commands
 
 **Why:** Being given imperative instruction lists reads as bossy and shifts work back onto them; they came here to have it done.
 
-**How to apply:** Drive tools/CLI directly. Only ask the user to act for the irreducible human-only steps (e.g. an OAuth "Authorize" click), and frame those as "just approve this," not commands. For `gh auth login`, use the web/device flow in the background and relay only the one-time code + URL. See [[project-public-git-sync-demo]].
+**How to apply:** Drive tools/CLI directly. Only ask the user to act for the irreducible human-only steps (e.g. an OAuth "Authorize" click), and frame those as "just approve this," not commands. For `gh auth login`, use the web/device flow in the background and relay only the one-time code + URL. Also, when building through many small steps, **keep momentum** — don't repeatedly offer to "wrap up for tonight" or ask whether to continue after each step; proceed to the next step until told to stop ("dnt ask me about wraping tonight"). See [[project-public-git-sync-demo]].

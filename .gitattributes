@@ -1,0 +1,37 @@
+# Normalize line endings across machines (office <-> home)
+* text=auto
+
+# Unity text-serialized assets — keep as text, avoid EOL mangling
+*.cs        text diff=csharp
+*.shader    text
+*.cginc     text
+*.hlsl      text
+*.uxml      text
+*.uss       text
+*.asmdef    text
+*.json      text
+*.md        text
+
+# Unity YAML assets — treat as text but do not attempt merges
+*.unity     text merge=unityyamlmerge eol=lf
+*.prefab    text merge=unityyamlmerge eol=lf
+*.asset     text merge=unityyamlmerge eol=lf
+*.meta      text merge=unityyamlmerge eol=lf
+*.controller text merge=unityyamlmerge eol=lf
+*.mat       text merge=unityyamlmerge eol=lf
+
+# Claude chat transcripts — line-based JSON, keep LF, never merge
+.claude-history/**/*.jsonl text eol=lf -merge
+
+# Common binary assets (mark so Git does not try to diff/merge them)
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.psd  binary
+*.fbx  binary
+*.wav  binary
+*.mp3  binary
+*.ogg  binary
+*.ttf  binary
+*.otf  binary

@@ -4,13 +4,15 @@
 > Sections below map to Adeeb's required deliverable checklist, so this doc grows
 > into the final handover writeup + video script.
 >
-> **Build status:** Backend done + verified against **LIVE Firebase**. UI working
-> in Unity: **Main Menu** shelf ✅, **Playback** (page flip, renders background +
-> stickers) ✅, **Editor** (pick background, drop + **drag** stickers, save) ✅ —
-> all via event-driven navigation (EventBus/AppRoot). Firebase project
-> `adeeb-booklab-07111926` (Spark/free). Remaining: sticker **scale/delete** +
-> **multiple pages** in the editor, WebGL build, live deploy (Firebase Hosting),
-> handover doc + video.
+> **Build status:** Task 1 is **FEATURE-COMPLETE and DEPLOYED LIVE** →
+> **https://adeeb-booklab-07111926.web.app**
+> Main Menu shelf ✅ · Playback (page flip) ✅ · Editor (background, drop / drag /
+> **scale** / **delete** stickers, **multiple pages**, **editable title**) ✅ ·
+> event-driven nav (EventBus/AppRoot) ✅ · live Firebase RTDB save/load over REST ✅ ·
+> two-tier image cache ✅ · WebGL build + Firebase Hosting ✅. Project
+> `adeeb-booklab-07111926` (Spark/free).
+> **Remaining:** rebuild + redeploy the latest editor changes (`BookLab > Build WebGL`,
+> then `bash firebase/deploy-hosting.sh`); record the video walkthrough; then Task 2.
 
 ---
 
@@ -108,6 +110,7 @@ Sits in Realtime DB as a tree: `/assetCatalog` (the picker menu) and `/books/{ki
 - **Per-kid data with a single `demo` id** — no login to build, but structured to scale.
 - **Free Spark plan; no Cloud Functions** (see §10).
 - **Asset hosting → Firebase Hosting.** Started with a placeholder image service to prove the pipeline fast, but it **rate-limited** on repeated loads (a fresh viewer would get 404s). Migrated the images to **Firebase Hosting** — our own free CDN, same origin as the WebGL build (no CORS). Notably, the **cache masked the outage during dev** (the app kept showing images from IndexedDB even while the 3rd-party host refused new requests) — a real-world demonstration of why the caching layer matters. URLs are now stable, so swapping in real art = replace the PNG + redeploy, no DB change.
+- **Hosting the WebGL payload on Firebase.** Unity's Gzip build (`.wasm.gz` / `.data.gz` / `.framework.js.gz`) fought Firebase's CDN: Firebase **strips `Content-Encoding: gzip` from any `.js` filename** (it manages JS compression itself) and caches encodings inconsistently — so the manual-header approach failed (the browser received still-gzipped wasm → *"expected magic word"* error). Fix: **ship the payload uncompressed and let Firebase gzip it natively** over the wire — reliable, cache-consistent, and renaming the files also busts stale caches. Automated in `firebase/deploy-hosting.sh`. Verified `wasm`/`data`/`framework.js` all return `Content-Encoding: gzip` from origin, with `wasm` keeping `application/wasm` for streaming instantiation.
 
 ## 9. Use of AI tools
 

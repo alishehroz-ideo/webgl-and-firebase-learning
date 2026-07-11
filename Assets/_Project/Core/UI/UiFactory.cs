@@ -37,6 +37,7 @@ namespace BookLab.Core.UI
             t.text = text; t.font = Font; t.fontSize = size; t.color = color; t.alignment = align;
             t.horizontalOverflow = HorizontalWrapMode.Wrap;
             t.verticalOverflow = VerticalWrapMode.Truncate;
+            t.raycastTarget = false;   // labels never need clicks — never let them block buttons behind them
             return t;
         }
 

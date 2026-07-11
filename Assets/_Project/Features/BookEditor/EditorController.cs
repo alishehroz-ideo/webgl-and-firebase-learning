@@ -53,10 +53,10 @@ namespace BookLab.Features.BookEditor
             srt.anchoredPosition = new Vector2(-30, -25); srt.sizeDelta = new Vector2(200, 70);
             save.onClick.AddListener(Save);
 
-            var prompt = UiFactory.Label("Prompt", root, "Pick a background ↓   •   tap a sticker ←   •   drag to move", 24, new Color(0.8f, 0.85f, 1f));
+            var prompt = UiFactory.Label("Prompt", root, "Pick a background ↓    tap a sticker ←    drag to move", 24, new Color(0.8f, 0.85f, 1f));
             var prt = prompt.rectTransform;
             prt.anchorMin = prt.anchorMax = new Vector2(0.5f, 1); prt.pivot = new Vector2(0.5f, 1);
-            prt.anchoredPosition = new Vector2(0, -30); prt.sizeDelta = new Vector2(1000, 50);
+            prt.anchoredPosition = new Vector2(0, -110); prt.sizeDelta = new Vector2(1000, 50);   // below the top bar buttons
 
             _catalog = await ContentApi.GetCatalog();
             BuildBackgroundPicker(root);

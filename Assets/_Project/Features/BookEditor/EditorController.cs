@@ -24,6 +24,7 @@ namespace BookLab.Features.BookEditor
 
         GameObject _selToolbar;
         Text _pageLabel;
+        InputField _titleInput;
 
         PageModel CurrentPage => _book.pages[_pageIndex];
 
@@ -55,6 +56,12 @@ namespace BookLab.Features.BookEditor
             Place(save, new Vector2(1, 1), new Vector2(-30, -25), new Vector2(200, 70));
             save.onClick.AddListener(Save);
 
+            // Book title box (top-centre)
+            _titleInput = UiFactory.InputField("TitleInput", _root, "Name your book…", 28);
+            var tirt = (RectTransform)_titleInput.transform;
+            tirt.anchorMin = tirt.anchorMax = new Vector2(0.5f, 1); tirt.pivot = new Vector2(0.5f, 1);
+            tirt.anchoredPosition = new Vector2(0, -25); tirt.sizeDelta = new Vector2(460, 66);
+
             BuildSelectionToolbar();
             BuildPageBar();
 
@@ -75,8 +82,8 @@ namespace BookLab.Features.BookEditor
         void BuildSelectionToolbar()
         {
             var bar = UiFactory.Panel("SelToolbar", _root, new Color(0f, 0f, 0f, 0.6f));
-            bar.anchorMin = bar.anchorMax = new Vector2(0.5f, 1); bar.pivot = new Vector2(0.5f, 1);
-            bar.anchoredPosition = new Vector2(0, -25); bar.sizeDelta = new Vector2(380, 76);
+            bar.anchorMin = bar.anchorMax = new Vector2(0.5f, 0); bar.pivot = new Vector2(0.5f, 0);
+            bar.anchoredPosition = new Vector2(0, 200); bar.sizeDelta = new Vector2(380, 76);   // bottom-centre, above the bg strip
             var hlg = bar.gameObject.AddComponent<HorizontalLayoutGroup>();
             hlg.spacing = 10; hlg.padding = new RectOffset(12, 12, 8, 8);
             hlg.childAlignment = TextAnchor.MiddleCenter;
@@ -227,8 +234,6 @@ namespace BookLab.Features.BookEditor
         void SelectBackground(string id)
         {
             CurrentPage.backgroundId = id;
-            var def = _catalog.Find(id);
-            if (def != null && _book.title == "New Book") _book.title = def.name;   // name after first bg
             SetBg(id);
         }
 
@@ -326,6 +331,9 @@ namespace BookLab.Features.BookEditor
 
         async void Save()
         {
+            var typed = _titleInput != null ? _titleInput.text.Trim() : "";
+            _book.title = string.IsNullOrEmpty(typed) ? "Untitled" : typed;
+
             bool ok = await ContentApi.SaveBook(AppConfig.KidId, _book);
             Debug.Log($"[Editor] saved '{_book.title}' ({_book.pages.Count} pages) -> {(ok ? "OK id=" + _book.id : "FAILED")}");
             EventBus.Publish(new GoHomeRequest());

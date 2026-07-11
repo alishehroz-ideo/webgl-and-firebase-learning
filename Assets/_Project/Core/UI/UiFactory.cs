@@ -55,6 +55,28 @@ namespace BookLab.Core.UI
             return btn;
         }
 
+        public static InputField InputField(string name, Transform parent, string placeholder, int size)
+        {
+            var rt = Panel(name, parent, new Color(1f, 1f, 1f, 0.92f));
+            var input = rt.gameObject.AddComponent<InputField>();
+            input.targetGraphic = rt.GetComponent<Image>();
+
+            var text = Label("Text", rt, "", size, new Color(0.1f, 0.1f, 0.1f), TextAnchor.MiddleLeft);
+            text.horizontalOverflow = HorizontalWrapMode.Overflow;
+            text.rectTransform.anchorMin = Vector2.zero; text.rectTransform.anchorMax = Vector2.one;
+            text.rectTransform.offsetMin = new Vector2(14, 0); text.rectTransform.offsetMax = new Vector2(-14, 0);
+            text.supportRichText = false;
+
+            var ph = Label("Placeholder", rt, placeholder, size, new Color(0.1f, 0.1f, 0.1f, 0.4f), TextAnchor.MiddleLeft);
+            ph.horizontalOverflow = HorizontalWrapMode.Overflow;
+            ph.rectTransform.anchorMin = Vector2.zero; ph.rectTransform.anchorMax = Vector2.one;
+            ph.rectTransform.offsetMin = new Vector2(14, 0); ph.rectTransform.offsetMax = new Vector2(-14, 0);
+
+            input.textComponent = text;
+            input.placeholder = ph;
+            return input;
+        }
+
         public static void Stretch(RectTransform rt)
         {
             rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;

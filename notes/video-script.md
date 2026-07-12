@@ -34,10 +34,10 @@ Covers all six required points: ① overview · ② architecture · ③ asset lo
 🎙 **SAY:**
 > "Assets — the backgrounds and stickers — live in the cloud and load on demand, only when they're first shown. Then they're cached in two tiers so they never download twice. First, memory — instant, but gone when the tab closes. Second, the browser's IndexedDB, which survives reloads. Only if both miss do we download once from Firebase Hosting and store it in both. Think of the cache as a fridge and the cloud as the warehouse — the fridge holds what you're using now, and if something gets evicted, we just restock it. I'm honest about the WebGL limits too: IndexedDB is per-browser, has a quota, and can be cleared; there are no background threads; and big textures hit a memory ceiling — which is exactly why downloading once matters so much."
 
-### 6 · Key decisions & challenges  (~0:45)
-🎬 **SHOW:** Deck — **Decisions** slide.
+### 6 · Key decisions & challenges  (~1:00)
+🎬 **SHOW:** Deck — **Challenges** slide (four cards).
 🎙 **SAY:**
-> "A few decisions defined the project. Using REST instead of the SDK, so it runs in WebGL. Storing references instead of images, which keeps saves tiny and lets me swap the art with no code changes. And the hardest challenge — getting the compressed WebGL build to actually load on Firebase Hosting. Firebase quietly strips the encoding header from JavaScript files and caches inconsistently, so the game failed with a WebAssembly error. The fix was to ship the payload uncompressed and let Firebase compress it natively — reliable, and cache-safe."
+> "The interesting engineering was in four places. First — because the Firebase SDK doesn't run in WebGL, the whole data layer is REST, and I wrapped Unity's callback-based web requests in a TaskCompletionSource to get clean async-await in a single-threaded runtime. Second, placement — a sticker's pixel position means nothing across different screens, so I convert the pointer into the stage's local space and then to normalized zero-to-one coordinates, which is why a book made on a phone replays perfectly on a desktop. Third, caching with no filesystem — sprites live in memory and mirror to the browser's IndexedDB, with in-flight de-duplication so the same asset never downloads twice. And fourth, the hardest deploy bug — Firebase strips the encoding header from JavaScript and caches inconsistently, so the WebAssembly wouldn't load; the fix was to ship the payload uncompressed and let Firebase gzip it natively."
 
 ### 7 · Use of AI tools  (~0:30)
 🎬 **SHOW:** Deck — **AI tools** slide.

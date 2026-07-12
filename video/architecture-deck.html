@@ -12,7 +12,6 @@
     --maxw:1120px;
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
   body{
     margin:0;background:
       radial-gradient(1200px 700px at 80% -10%,rgba(230,171,92,.06),transparent 60%),
@@ -308,29 +307,62 @@
 </section>
 
 <script>
-  // section reveal + nav highlight
+  // Deck-style navigation: arrow keys / wheel snap one section at a time,
+  // flying there with an eased "swoop". Each landing replays the section's animation.
   var sections=[].slice.call(document.querySelectorAll('.slide'));
   var dots=[].slice.call(document.querySelectorAll('.dots a'));
-  var io=new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      var id=e.target.id, arch=e.target.querySelector('.arch'), flow=e.target.querySelector('.flow');
-      if(e.isIntersecting){
-        e.target.classList.add('in');
-        if(arch)arch.classList.add('in');
-        if(flow)flow.classList.add('in');
-        var i=sections.indexOf(e.target);
-        dots.forEach(function(d,k){d.classList.toggle('on',k===i)});
-      }
-    });
-  },{threshold:.35});
-  sections.forEach(function(s){io.observe(s)});
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var cur=0, animating=false;
 
-  // replay buttons: re-trigger the animation on a section
+  function setDot(i){dots.forEach(function(d,k){d.classList.toggle('on',k===i);});}
+  function playSection(sec){
+    sec.classList.add('in');                                   // reveal content (first landing)
+    var arch=sec.querySelector('.arch'); if(arch){arch.classList.remove('in');void arch.offsetWidth;arch.classList.add('in');}
+    var flow=sec.querySelector('.flow'); if(flow){flow.classList.remove('in');void flow.offsetWidth;flow.classList.add('in');}
+  }
+  function easeInOut(p){return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;}   // easeInOutCubic
+
+  function goTo(i){
+    i=Math.max(0,Math.min(sections.length-1,i));
+    var startY=window.scrollY, endY=sections[i].offsetTop, dist=endY-startY;
+    cur=i; setDot(i);
+    if(reduce||Math.abs(dist)<2){window.scrollTo(0,endY);playSection(sections[i]);return;}
+    animating=true;
+    var dur=Math.min(1000,Math.max(680,Math.abs(dist)*0.55)), t0=performance.now();
+    (function step(now){
+      var p=Math.min(1,(now-t0)/dur);
+      window.scrollTo(0,startY+dist*easeInOut(p));
+      if(p<1){requestAnimationFrame(step);} else {animating=false;playSection(sections[i]);}
+    })(performance.now());
+  }
+
+  addEventListener('keydown',function(e){
+    var k=e.key;
+    if(k==='ArrowDown'||k==='PageDown'||k===' '||k==='ArrowRight'){e.preventDefault();goTo(cur+1);}
+    else if(k==='ArrowUp'||k==='PageUp'||k==='ArrowLeft'){e.preventDefault();goTo(cur-1);}
+    else if(k==='Home'){e.preventDefault();goTo(0);}
+    else if(k==='End'){e.preventDefault();goTo(sections.length-1);}
+  });
+
+  var wheelLock=false;                                          // one section per wheel gesture
+  addEventListener('wheel',function(e){
+    e.preventDefault();
+    if(animating||wheelLock||Math.abs(e.deltaY)<6)return;
+    wheelLock=true;setTimeout(function(){wheelLock=false;},150);
+    goTo(cur+(e.deltaY>0?1:-1));
+  },{passive:false});
+
+  dots.forEach(function(d,i){d.addEventListener('click',function(e){e.preventDefault();goTo(i);});});
   document.querySelectorAll('.replay').forEach(function(btn){
     btn.addEventListener('click',function(){
       var sec=document.getElementById(btn.dataset.target);
-      var anims=[sec.querySelector('.arch'),sec.querySelector('.flow')].filter(Boolean);
-      anims.forEach(function(a){a.classList.remove('in'); void a.offsetWidth; a.classList.add('in');});
+      [sec.querySelector('.arch'),sec.querySelector('.flow')].filter(Boolean)
+        .forEach(function(a){a.classList.remove('in');void a.offsetWidth;a.classList.add('in');});
     });
   });
+
+  addEventListener('resize',function(){window.scrollTo(0,sections[cur].offsetTop);});
+  addEventListener('click',function(){try{window.focus();}catch(e){}});   // grab keyboard focus
+  try{window.focus();}catch(e){}
+  setDot(0);playSection(sections[0]);
 </script>

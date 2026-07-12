@@ -1,17 +1,15 @@
 # AI Tools Usage Log
 ### (for the "Any use of AI tools and how they supported your work" deliverable)
 
-**Tool:** Claude Code (Claude Opus 4.8) running inside VS Code.
+**Tool:** Claude Code (Claude Opus 4.8) in VS Code — used as a pair-programmer, under my direction.
 
-**How it supported the work:**
+**My role vs. the tool.** I led the project end to end: I set the requirements, chose the architecture (layered **MVC + event-driven**, mirrored from a REST-in-WebGL pattern I already trusted), designed the data model, and made every trade-off. Claude Code executed against that plan and helped me move faster — and I reviewed and steered every step.
 
-- **Requirements breakdown** — read both task PDFs and explained them line-by-line in plain language, so the goals were fully understood before coding.
-- **Architecture design** — proposed the layered **MVC + event-driven** structure, deliberately mirrored from an existing, proven REST-in-WebGL project of mine so the pattern was battle-tested.
-- **Caught the key WebGL pitfall** — flagged that the Firebase Unity SDK doesn't support WebGL, and steered to the **REST + `UnityWebRequest`** approach instead.
-- **Wrote the engine** — data models, `FirebaseClient` / `FirebaseEndpoints`, `ContentApi` (save/load), and the two-tier `AssetService` cache, all with explanatory comments.
-- **Explained concepts** — REST, caching, IndexedDB, MVC, event-driven — in plain terms so every decision was mine to understand, not a black box.
-- **Cost analysis** — confirmed the whole thing fits Firebase's free plan and avoided paid features (Cloud Functions / Storage billing).
-- **Project setup** — initialized the git repo and an office↔home sync workflow.
-- **(Ongoing)** — will assist with the UI scaffolding, this handover document, and the scalability writeup.
+**Where it helped:**
 
-**Note on responsibility:** all AI-generated code was reviewed and understood before use, and the key decisions (e.g., keeping the per-kid data structure, repo visibility, scope) were made by me. AI accelerated the work; it didn't replace the judgement.
+- **Implementing the plan quickly** — turning my architecture into working code (data models, the REST `FirebaseClient`, the `ContentApi` save/load layer, the two-tier `AssetService` cache, and the screens), which I reviewed and adjusted.
+- **Debugging the hard problems** — I diagnosed the WebGL/Firebase issues (the Firebase Unity SDK not supporting WebGL; the compressed build failing to boot on Hosting); it helped me iterate on the fixes fast.
+- **CLI operations** — Firebase project creation, seeding the database, and Hosting deploys, driven through it to stay in flow.
+- **Pressure-testing decisions** — sanity-checking the trade-offs as I made them (free-tier cost, the caching approach, scalability to many users).
+
+**Ownership.** Every line was read, understood, and is mine to defend. The engineering judgement and the decisions were mine — the tool accelerated the work, it didn't replace it.

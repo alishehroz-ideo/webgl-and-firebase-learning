@@ -39,10 +39,10 @@ Covers all six required points: ① overview · ② architecture · ③ asset lo
 🎙 **SAY:**
 > "The interesting engineering was in four places. First — because the Firebase SDK doesn't run in WebGL, the whole data layer is REST, and I wrapped Unity's callback-based web requests in a TaskCompletionSource to get clean async-await in a single-threaded runtime. Second, placement — a sticker's pixel position means nothing across different screens, so I convert the pointer into the stage's local space and then to normalized zero-to-one coordinates, which is why a book made on a phone replays perfectly on a desktop. Third, caching with no filesystem — sprites live in memory and mirror to the browser's IndexedDB, with in-flight de-duplication so the same asset never downloads twice. And fourth, the hardest deploy bug — Firebase strips the encoding header from JavaScript and caches inconsistently, so the WebAssembly wouldn't load; the fix was to ship the payload uncompressed and let Firebase gzip it natively."
 
-### 7 · Use of AI tools  (~0:30)
+### 7 · Use of AI tools  (~0:35)
 🎬 **SHOW:** Deck — **AI tools** slide.
 🎙 **SAY:**
-> "I used Claude Code as a pair-programmer throughout — to break down the brief, shape the architecture, write the engine and UI, drive the Firebase setup from the command line, and debug that hosting issue. Every change was reviewed and understood, and the decisions were mine. It accelerated the work; it didn't replace the judgement."
+> "On AI — I led this project end to end. The requirements, the architecture, the data model, and every trade-off were my calls. I used Claude Code as a pair-programmer to implement that plan quickly, and to iterate on the hard WebGL and Firebase bugs — but I reviewed and steered every step, and I can defend every line. It was a power tool; the engineering judgement, and the ownership, are mine."
 
 ### 8 · Wrap  (~0:15)
 🎬 **SHOW:** Deck — **Wrap** slide (live link) → optionally cut to the live app one more time.

@@ -1,0 +1,336 @@
+<title>BookLab — Architecture &amp; Data Flow</title>
+<style>
+  :root{
+    --bg:#0d0f15; --bg2:#11141d; --surface:#171b26; --surface2:#1e2331;
+    --line:#2a3040; --line2:#353c4e;
+    --ink:#eef1f7; --muted:#98a0b0; --faint:#6b7385;
+    --sand:#e6ab5c; --sand-dim:rgba(230,171,92,.16);
+    --sea:#48b7d0; --sea-dim:rgba(72,183,208,.16);
+    --green:#4bb37c; --green-dim:rgba(75,179,124,.16);
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,monospace;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:
+      radial-gradient(1200px 700px at 80% -10%,rgba(230,171,92,.06),transparent 60%),
+      radial-gradient(1100px 700px at -10% 110%,rgba(72,183,208,.07),transparent 60%),
+      var(--bg);
+    color:var(--ink);font-family:var(--sans);line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wordmark{position:fixed;top:22px;left:26px;z-index:50;font-weight:800;letter-spacing:-.02em;font-size:19px}
+  .wordmark small{color:var(--faint);font-weight:500;margin-left:8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+  .dots{position:fixed;top:50%;right:22px;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:12px}
+  .dots a{width:9px;height:9px;border-radius:50%;background:var(--line2);transition:.3s;outline:none}
+  .dots a:hover,.dots a.on{background:var(--sand);box-shadow:0 0 0 4px var(--sand-dim)}
+  .dots a:focus-visible{box-shadow:0 0 0 3px var(--sea)}
+
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    max-width:var(--maxw);margin:0 auto;padding:96px 40px;gap:26px}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--sea);display:flex;align-items:center;gap:12px}
+  .eyebrow .n{color:var(--faint)}
+  .eyebrow::before{content:"";width:34px;height:1px;background:var(--sea);opacity:.6}
+  h1{font-size:clamp(40px,7vw,76px);line-height:1.02;letter-spacing:-.03em;margin:0;font-weight:800;text-wrap:balance}
+  h2{font-size:clamp(30px,4.4vw,46px);line-height:1.06;letter-spacing:-.02em;margin:0;font-weight:800;text-wrap:balance}
+  .lead{font-size:clamp(17px,1.9vw,21px);color:var(--muted);max-width:60ch;text-wrap:pretty}
+  .mono{font-family:var(--mono)}
+  .sand{color:var(--sand)} .sea{color:var(--sea)} .green{color:var(--green)}
+
+  /* reveal */
+  .reveal>*{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in>*{opacity:1;transform:none}
+  .reveal.in>*:nth-child(2){transition-delay:.08s}
+  .reveal.in>*:nth-child(3){transition-delay:.16s}
+  .reveal.in>*:nth-child(4){transition-delay:.24s}
+  .reveal.in>*:nth-child(5){transition-delay:.32s}
+
+  /* cover */
+  .cover .stack{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{font-family:var(--mono);font-size:13px;padding:8px 13px;border:1px solid var(--line2);border-radius:999px;color:var(--muted);background:var(--surface)}
+  .chip b{color:var(--ink);font-weight:600}
+
+  /* generic node */
+  .node{background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px 16px;min-width:0}
+  .node .t{font-weight:700;font-size:15px;letter-spacing:-.01em}
+  .node .s{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:3px;line-height:1.35}
+  .node.warm{border-color:rgba(230,171,92,.45);box-shadow:0 0 0 1px var(--sand-dim) inset}
+  .node.cool{border-color:rgba(72,183,208,.45);box-shadow:0 0 0 1px var(--sea-dim) inset}
+  .node.good{border-color:rgba(75,179,124,.45);box-shadow:0 0 0 1px var(--green-dim) inset}
+  .node .tag{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--sea);display:block;margin-bottom:6px}
+  .node.warm .tag{color:var(--sand)} .node.good .tag{color:var(--green)}
+
+  /* ARCHITECTURE stack */
+  .arch{display:flex;flex-direction:column;gap:0}
+  .layer{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center;padding:12px 0}
+  .layer .lab{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);text-align:right}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .row>.node{flex:1 1 0}
+  .conn{grid-column:2;height:20px;position:relative}
+  .conn::before{content:"";position:absolute;left:26px;top:0;bottom:0;width:2px;background:linear-gradient(var(--line2),transparent);transform:scaleY(0);transform-origin:top;transition:transform .5s ease}
+  .arch.in .conn::before{transform:scaleY(1)}
+  .arch .layer{opacity:0;transform:translateY(14px);transition:.55s ease}
+  .arch.in .layer{opacity:1;transform:none}
+  .arch.in .layer:nth-child(1){transition-delay:.05s}
+  .arch.in .layer:nth-child(3){transition-delay:.18s}
+  .arch.in .layer:nth-child(5){transition-delay:.32s}
+  .arch.in .layer:nth-child(7){transition-delay:.46s}
+  .arch.in .layer:nth-child(9){transition-delay:.60s}
+  .callouts{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+  .callout{font-family:var(--mono);font-size:12px;padding:7px 12px;border-radius:8px;border:1px dashed var(--line2);color:var(--muted)}
+  .callout b{color:var(--sand)} .callout.evt b{color:var(--sea)}
+
+  /* FLOW (horizontal, with travelling dot) */
+  .flow{display:flex;flex-direction:column;gap:14px}
+  .track{position:relative;display:flex;align-items:stretch;gap:0;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;overflow-x:auto}
+  .track .node{flex:1 1 0;min-width:150px}
+  .arrow{align-self:center;flex:0 0 42px;height:2px;background:var(--line2);position:relative;margin:0 2px}
+  .arrow::after{content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left-color:var(--line2)}
+  .beam{position:absolute;top:0;left:0;height:100%;width:100%;border-radius:16px;pointer-events:none;overflow:hidden}
+  .beam i{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);
+    filter:blur(.3px);animation:travel 3.4s linear infinite;animation-play-state:paused}
+  .flow.in .beam i{animation-play-state:running}
+  .beam .save{background:var(--sand);box-shadow:0 0 16px 4px var(--sand)}
+  .beam .load{background:var(--sea);box-shadow:0 0 16px 4px var(--sea);animation-direction:reverse;animation-delay:1.7s}
+  @keyframes travel{0%{left:4%}45%{left:96%}55%{left:96%}100%{left:96%}}
+  .flowlabels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--faint)}
+  .flowlabels b{color:var(--sand)} .flowlabels .r{color:var(--sea)}
+
+  .recipe{background:#0b0d13;border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-family:var(--mono);font-size:13px;line-height:1.7;color:#c9d1de;overflow-x:auto}
+  .recipe .k{color:var(--sea)} .recipe .v{color:var(--sand)} .recipe .c{color:var(--faint)}
+
+  /* CACHE ladder */
+  .cache{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  .step{background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:18px}
+  .step .h{display:flex;align-items:center;gap:10px;font-weight:700;margin-bottom:6px}
+  .step .num{font-family:var(--mono);font-size:12px;color:var(--faint);border:1px solid var(--line2);border-radius:6px;padding:2px 7px}
+  .step p{margin:6px 0 0;color:var(--muted);font-size:14px}
+  .step.hot{border-color:rgba(230,171,92,.4)} .step.warm2{border-color:rgba(72,183,208,.4)} .step.cold{border-color:rgba(75,179,124,.4)}
+  .analogy{display:flex;gap:14px;flex-wrap:wrap}
+  .analogy .node{flex:1 1 220px}
+  .limits{font-size:14px;color:var(--muted)}
+  .limits b{color:var(--ink);font-weight:600}
+
+  /* decision + AI cards */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:var(--surface);border:1px solid var(--line2);border-radius:16px;padding:20px 22px}
+  .card h3{margin:0 0 8px;font-size:18px;letter-spacing:-.01em}
+  .card p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.55}
+  .card .k{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--sand);display:block;margin-bottom:9px}
+  .card.sea .k{color:var(--sea)}
+  ul.clean{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+  ul.clean li{padding-left:26px;position:relative;color:var(--muted);font-size:15.5px;line-height:1.5}
+  ul.clean li::before{content:"›";position:absolute;left:6px;top:-1px;color:var(--sea);font-weight:700}
+  ul.clean li b{color:var(--ink);font-weight:600}
+
+  .replay{align-self:flex-start;margin-top:2px;font-family:var(--mono);font-size:12px;color:var(--muted);
+    background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:8px 13px;cursor:pointer;transition:.2s}
+  .replay:hover{color:var(--ink);border-color:var(--sea)}
+  .replay:focus-visible{outline:2px solid var(--sea);outline-offset:2px}
+
+  .biglink{font-family:var(--mono);font-size:clamp(16px,2.4vw,26px);color:var(--sea);word-break:break-all}
+  .foot{color:var(--faint);font-size:14px;font-family:var(--mono)}
+
+  @media (max-width:720px){
+    .cache,.cards{grid-template-columns:1fr}
+    .layer{grid-template-columns:1fr}
+    .layer .lab{text-align:left}
+    .dots{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal>*,.arch .layer{opacity:1;transform:none}
+    .conn::before{transform:scaleY(1)}
+  }
+</style>
+
+<div class="wordmark">BookLab<small>Adeeb · Task 1</small></div>
+<nav class="dots" aria-label="Sections">
+  <a href="#s0" class="on" aria-label="Cover"></a>
+  <a href="#s1" aria-label="Overview"></a>
+  <a href="#s2" aria-label="Architecture"></a>
+  <a href="#s3" aria-label="Data"></a>
+  <a href="#s4" aria-label="Caching"></a>
+  <a href="#s5" aria-label="Decisions"></a>
+  <a href="#s6" aria-label="AI tools"></a>
+  <a href="#s7" aria-label="Wrap"></a>
+</nav>
+
+<!-- 0 · COVER -->
+<section id="s0" class="slide cover reveal">
+  <div class="eyebrow"><span class="n">Technical walkthrough</span></div>
+  <h1>A WebGL book-maker<br>for kids, on <span class="sea">Firebase</span>.</h1>
+  <p class="lead">Children pick a scene, drag &amp; scale stickers across pages, and save a storybook to the cloud — it appears as a cover on their shelf to read back. Built in Unity, served in the browser.</p>
+  <div class="stack">
+    <span class="chip"><b>Unity</b> WebGL</span>
+    <span class="chip"><b>Firebase</b> Realtime DB + Hosting</span>
+    <span class="chip"><b>REST</b> via UnityWebRequest</span>
+    <span class="chip"><b>MVC</b> + event-driven</span>
+  </div>
+</section>
+
+<!-- 1 · OVERVIEW -->
+<section id="s1" class="slide reveal">
+  <div class="eyebrow"><span class="n">01</span> Overview of the implementation</div>
+  <h2>Three screens, one loop.</h2>
+  <p class="lead">The whole app is a single create-save-read loop. Everything the child touches is one of these three screens; the app auto-starts and swaps between them.</p>
+  <div class="flow">
+    <div class="track">
+      <div class="node cool"><span class="tag">Shelf</span><div class="t">Main Menu</div><div class="s">saved books as cover-cards · “Create New”</div></div>
+      <div class="arrow"></div>
+      <div class="node warm"><span class="tag">Create</span><div class="t">Editor</div><div class="s">pick background · drag + scale stickers · pages · save</div></div>
+      <div class="arrow"></div>
+      <div class="node good"><span class="tag">Read</span><div class="t">Playback</div><div class="s">flip pages, read-only</div></div>
+    </div>
+  </div>
+  <p class="lead" style="font-size:16px">Target <b class="sand">1920×1080</b>, scaling to any screen · runs entirely in the browser · free Firebase (Spark) plan.</p>
+</section>
+
+<!-- 2 · ARCHITECTURE -->
+<section id="s2" class="slide reveal">
+  <div class="eyebrow"><span class="n">02</span> Architecture</div>
+  <h2>Layered: <span class="sand">MVC</span> for structure, an <span class="sea">event bus</span> for flow.</h2>
+  <p class="lead">Each layer has one job and only talks downward. Screens never reference each other — they announce events, and a tiny <span class="mono">AppRoot</span> swaps them.</p>
+
+  <div class="arch">
+    <div class="layer"><div class="lab">App</div><div class="row">
+      <div class="node"><div class="t">Bootstrap → AppRoot</div><div class="s">builds the canvas · owns screen navigation</div></div>
+    </div></div>
+    <div class="conn"></div>
+    <div class="layer"><div class="lab">Features · MVC</div><div class="row">
+      <div class="node cool"><div class="t">Main Menu</div><div class="s">View + Controller</div></div>
+      <div class="node cool"><div class="t">Editor</div><div class="s">View + Controller</div></div>
+      <div class="node cool"><div class="t">Playback</div><div class="s">View + Controller</div></div>
+    </div></div>
+    <div class="conn"></div>
+    <div class="layer"><div class="lab">Services</div><div class="row">
+      <div class="node"><div class="t">ContentApi</div><div class="s">front door · Save / Load / List / Catalog</div></div>
+    </div></div>
+    <div class="conn"></div>
+    <div class="layer"><div class="lab">Core</div><div class="row">
+      <div class="node warm"><div class="t">FirebaseClient / Endpoints</div><div class="s">the only code that touches the internet</div></div>
+      <div class="node"><div class="t">EventBus</div><div class="s">publish / subscribe</div></div>
+      <div class="node"><div class="t">AssetService</div><div class="s">two-tier image cache</div></div>
+    </div></div>
+    <div class="conn"></div>
+    <div class="layer"><div class="lab">Models · “M”</div><div class="row">
+      <div class="node"><div class="t">BookModel → PageModel → PlacedObject</div><div class="s">pure data · the book “recipe”</div></div>
+      <div class="node"><div class="t">AssetCatalog</div><div class="s">the picker menu</div></div>
+    </div></div>
+  </div>
+
+  <div class="callouts">
+    <span class="callout"><b>MVC</b> · data (Models) / screen (Views) / logic (Controllers) kept separate</span>
+    <span class="callout evt"><b>Event-driven</b> · screens publish nav events, never call each other</span>
+  </div>
+  <button class="replay" data-target="s2">↻ replay</button>
+</section>
+
+<!-- 3 · DATA -->
+<section id="s3" class="slide reveal">
+  <div class="eyebrow"><span class="n">03</span> How data is saved &amp; loaded</div>
+  <h2>Save the <span class="sand">recipe</span>, not the pictures.</h2>
+  <p class="lead">A saved book is just references + numbers — which asset, and where. Tiny. It travels to Firebase over REST (no SDK — the Firebase Unity SDK can't run in WebGL).</p>
+
+  <div class="flow">
+    <div class="flowlabels"><b>◂ SAVE (PUT)</b><span class="r">LOAD (GET) ▸</span></div>
+    <div class="track">
+      <div class="beam"><i class="save"></i><i class="load"></i></div>
+      <div class="node warm"><span class="tag">compose</span><div class="t">Editor</div><div class="s">builds a BookModel</div></div>
+      <div class="arrow"></div>
+      <div class="node"><span class="tag">front door</span><div class="t">ContentApi</div><div class="s">SaveBook / LoadBook</div></div>
+      <div class="arrow"></div>
+      <div class="node"><span class="tag">the wire</span><div class="t">FirebaseClient</div><div class="s">PutJson / GetJson</div></div>
+      <div class="arrow"></div>
+      <div class="node cool"><span class="tag">cloud</span><div class="t">Realtime DB</div><div class="s">/books/{kid}/{id}.json</div></div>
+    </div>
+    <button class="replay" data-target="s3">↻ replay flow</button>
+  </div>
+
+  <div class="recipe"><span class="c">// one placed sticker — normalized 0–1 so it replays on any screen</span>
+{ <span class="k">"assetId"</span>:<span class="v">"obj_camel"</span>, <span class="k">"x"</span>:<span class="v">0.62</span>, <span class="k">"y"</span>:<span class="v">0.55</span>, <span class="k">"scale"</span>:<span class="v">0.8</span>, <span class="k">"z"</span>:<span class="v">1</span> }</div>
+</section>
+
+<!-- 4 · CACHING -->
+<section id="s4" class="slide reveal">
+  <div class="eyebrow"><span class="n">04</span> Asset loading &amp; caching</div>
+  <h2>Download once. Reuse forever.</h2>
+  <p class="lead">Art lives in the cloud and loads on-demand — only when a sticker or background is first shown. Then it’s kept in two tiers so it never downloads twice.</p>
+
+  <div class="cache">
+    <div class="step hot"><div class="h"><span class="num">1</span> Memory</div><p>In-session <span class="mono">Dictionary</span> — instant. Gone when the tab closes.</p></div>
+    <div class="step warm2"><div class="h"><span class="num">2</span> Disk</div><p>Browser <b class="sea">IndexedDB</b> (via <span class="mono">persistentDataPath</span>) — survives reloads.</p></div>
+    <div class="step cold"><div class="h"><span class="num">3</span> Download</div><p>Miss both → fetch from Firebase Hosting <b>once</b>, store in both tiers.</p></div>
+  </div>
+
+  <div class="analogy">
+    <div class="node cool"><span class="tag">Fridge</span><div class="t">The cache (browser)</div><div class="s">what you’re using now · limited · old items evicted</div></div>
+    <div class="node warm"><span class="tag">Warehouse</span><div class="t">Cloud + CDN</div><div class="s">has everything · always restockable</div></div>
+  </div>
+  <p class="limits"><b>WebGL limits (named honestly):</b> IndexedDB is per-browser, has a quota, and can be evicted; there are no background threads; big textures hit a memory ceiling — so a cache miss just re-downloads. Plus in-flight de-dupe: the same image requested twice shares one download.</p>
+</section>
+
+<!-- 5 · DECISIONS -->
+<section id="s5" class="slide reveal">
+  <div class="eyebrow"><span class="n">05</span> Key decisions &amp; challenges</div>
+  <h2>Where the real engineering was.</h2>
+  <div class="cards">
+    <div class="card"><span class="k">Decision</span><h3>REST, not the SDK</h3><p>The Firebase Unity SDK doesn’t support WebGL. Everything talks to Firebase over its REST API with <span class="mono">UnityWebRequest</span> — the WebGL-safe path.</p></div>
+    <div class="card sea"><span class="k">Decision</span><h3>References, not images</h3><p>Books store asset IDs + normalized transforms. The recipe stays tiny; heavy art is hosted once and cached. Art can be swapped with <b>zero</b> code changes.</p></div>
+    <div class="card"><span class="k">Challenge</span><h3>The WebGL gzip fight</h3><p>Firebase strips <span class="mono">Content-Encoding</span> from <span class="mono">.js</span> and caches encodings inconsistently — the game wouldn’t load. Fix: ship the payload uncompressed and let Firebase gzip it natively.</p></div>
+    <div class="card sea"><span class="k">Decision</span><h3>Free-tier by design</h3><p>Runs entirely on Firebase’s free plan — Realtime DB + Hosting, covers stored inline, no Cloud Functions, no card.</p></div>
+  </div>
+</section>
+
+<!-- 6 · AI -->
+<section id="s6" class="slide reveal">
+  <div class="eyebrow"><span class="n">06</span> Use of AI tools</div>
+  <h2>Claude Code as a pair — reviewed, not outsourced.</h2>
+  <ul class="clean">
+    <li><b>Requirements &amp; design</b> — broke down the brief and shaped the layered MVC + event-driven structure, mirrored from a proven REST-in-WebGL project.</li>
+    <li><b>Caught the WebGL pitfall early</b> — flagged that the Firebase SDK is dead in WebGL, steering to REST.</li>
+    <li><b>Wrote the engine + UI</b> — models, Firebase client, save/load, the two-tier cache, and the screens.</li>
+    <li><b>Drove the ops via CLI</b> — created the Firebase project, seeded data, deployed Hosting, and debugged the gzip issue.</li>
+    <li><b>Kept work in sync</b> — git repo + an office↔home workflow that carried the code and the working session across machines.</li>
+  </ul>
+  <p class="lead" style="font-size:16px">Every change was <b class="green">reviewed and understood</b>; the decisions were mine. AI accelerated the build — it didn’t replace the judgement.</p>
+</section>
+
+<!-- 7 · WRAP -->
+<section id="s7" class="slide reveal">
+  <div class="eyebrow"><span class="n">Live</span></div>
+  <h2>Playable, on the same free project.</h2>
+  <div class="biglink">adeeb-booklab-07111926.web.app</div>
+  <p class="lead">Unity WebGL · Firebase Realtime Database + Hosting · REST over UnityWebRequest · two-tier caching · MVC + event-driven.</p>
+  <div class="foot">BookLab — Task 1 · Interactive Content Creation</div>
+</section>
+
+<script>
+  // section reveal + nav highlight
+  var sections=[].slice.call(document.querySelectorAll('.slide'));
+  var dots=[].slice.call(document.querySelectorAll('.dots a'));
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      var id=e.target.id, arch=e.target.querySelector('.arch'), flow=e.target.querySelector('.flow');
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        if(arch)arch.classList.add('in');
+        if(flow)flow.classList.add('in');
+        var i=sections.indexOf(e.target);
+        dots.forEach(function(d,k){d.classList.toggle('on',k===i)});
+      }
+    });
+  },{threshold:.35});
+  sections.forEach(function(s){io.observe(s)});
+
+  // replay buttons: re-trigger the animation on a section
+  document.querySelectorAll('.replay').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var sec=document.getElementById(btn.dataset.target);
+      var anims=[sec.querySelector('.arch'),sec.querySelector('.flow')].filter(Boolean);
+      anims.forEach(function(a){a.classList.remove('in'); void a.offsetWidth; a.classList.add('in');});
+    });
+  });
+</script>

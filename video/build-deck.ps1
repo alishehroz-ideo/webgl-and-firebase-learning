@@ -40,3 +40,10 @@ $map = [ordered]@{
 foreach($k in $map.Keys){ $html = $html.Replace($k, $map[$k]) }
 [System.IO.File]::WriteAllText($out, $html, (New-Object System.Text.UTF8Encoding($false)))
 Write-Host ('built architecture-deck.html (' + [int]((Get-Item $out).Length/1KB) + ' KB)')
+
+# Standalone document for recording locally (open in Chrome + F11 = no toolbar, no browser chrome).
+$wrap = "<!doctype html>`n<html lang=`"en`">`n<head><meta charset=`"utf-8`"><meta name=`"viewport`" content=`"width=device-width,initial-scale=1`"><title>BookLab</title></head>`n<body>`n"
+$standalone = $wrap + $html + "`n</body>`n</html>"
+$out2 = Join-Path $here 'deck-standalone.html'
+[System.IO.File]::WriteAllText($out2, $standalone, (New-Object System.Text.UTF8Encoding($false)))
+Write-Host 'also wrote deck-standalone.html  (open locally + F11 to record clean)'

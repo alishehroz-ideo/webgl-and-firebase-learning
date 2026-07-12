@@ -41,19 +41,19 @@ namespace BookLab.Features.Playback
             _background.color = new Color(0.20f, 0.20f, 0.25f);
             _background.raycastTarget = false;
 
-            var back = UiFactory.Button("Back", root, "← Back", new Color(0.30f, 0.30f, 0.36f), 28);
+            var back = UiFactory.Button("Back", root, "< Back", new Color(0.30f, 0.30f, 0.36f), 28);
             var brt = (RectTransform)back.transform;
             brt.anchorMin = brt.anchorMax = new Vector2(0, 1); brt.pivot = new Vector2(0, 1);
             brt.anchoredPosition = new Vector2(30, -30); brt.sizeDelta = new Vector2(190, 70);
             back.onClick.AddListener(() => EventBus.Publish(new GoHomeRequest()));
 
-            var prev = UiFactory.Button("Prev", root, "‹", new Color(0.25f, 0.27f, 0.33f), 54);
+            var prev = UiFactory.Button("Prev", root, "<", new Color(0.25f, 0.27f, 0.33f), 54);
             var prt = (RectTransform)prev.transform;
             prt.anchorMin = prt.anchorMax = new Vector2(0, 0.5f); prt.pivot = new Vector2(0, 0.5f);
             prt.anchoredPosition = new Vector2(20, 0); prt.sizeDelta = new Vector2(90, 150);
             prev.onClick.AddListener(() => Turn(-1));
 
-            var next = UiFactory.Button("Next", root, "›", new Color(0.25f, 0.27f, 0.33f), 54);
+            var next = UiFactory.Button("Next", root, ">", new Color(0.25f, 0.27f, 0.33f), 54);
             var nrt = (RectTransform)next.transform;
             nrt.anchorMin = nrt.anchorMax = new Vector2(1, 0.5f); nrt.pivot = new Vector2(1, 0.5f);
             nrt.anchoredPosition = new Vector2(-20, 0); nrt.sizeDelta = new Vector2(90, 150);

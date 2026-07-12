@@ -48,11 +48,11 @@ namespace BookLab.Features.BookEditor
             _background.color = new Color(0.18f, 0.18f, 0.22f);
             _background.raycastTarget = false;
 
-            var cancel = UiFactory.Button("Cancel", _root, "← Cancel", new Color(0.40f, 0.30f, 0.30f), 26);
+            var cancel = UiFactory.Button("Cancel", _root, "Cancel", new Color(0.40f, 0.30f, 0.30f), 26);
             Place(cancel, new Vector2(0, 1), new Vector2(30, -25), new Vector2(200, 70));
             cancel.onClick.AddListener(() => EventBus.Publish(new GoHomeRequest()));
 
-            var save = UiFactory.Button("Save", _root, "Save ✓", new Color(0.20f, 0.55f, 0.35f), 28);
+            var save = UiFactory.Button("Save", _root, "Save", new Color(0.20f, 0.55f, 0.35f), 28);
             Place(save, new Vector2(1, 1), new Vector2(-30, -25), new Vector2(200, 70));
             save.onClick.AddListener(Save);
 
@@ -90,7 +90,7 @@ namespace BookLab.Features.BookEditor
             hlg.childControlWidth = false; hlg.childControlHeight = false;
             hlg.childForceExpandWidth = false; hlg.childForceExpandHeight = false;
 
-            var minus = UiFactory.Button("Minus", bar, "−", new Color(0.25f, 0.27f, 0.33f), 34);
+            var minus = UiFactory.Button("Minus", bar, "-", new Color(0.25f, 0.27f, 0.33f), 34);
             ((RectTransform)minus.transform).sizeDelta = new Vector2(64, 60);
             minus.onClick.AddListener(() => ScaleSelected(0.85f));
 
@@ -118,18 +118,18 @@ namespace BookLab.Features.BookEditor
             hlg.childControlWidth = false; hlg.childControlHeight = false;
             hlg.childForceExpandWidth = false; hlg.childForceExpandHeight = false;
 
-            var prev = UiFactory.Button("PrevPage", brt, "‹", new Color(0.25f, 0.27f, 0.33f), 34);
+            var prev = UiFactory.Button("PrevPage", brt, "<", new Color(0.25f, 0.27f, 0.33f), 34);
             ((RectTransform)prev.transform).sizeDelta = new Vector2(60, 56);
             prev.onClick.AddListener(() => GoPage(-1));
 
             _pageLabel = UiFactory.Label("PageLabel", brt, "Page 1 / 1", 26, Color.white);
             ((RectTransform)_pageLabel.transform).sizeDelta = new Vector2(180, 56);
 
-            var next = UiFactory.Button("NextPage", brt, "›", new Color(0.25f, 0.27f, 0.33f), 34);
+            var next = UiFactory.Button("NextPage", brt, ">", new Color(0.25f, 0.27f, 0.33f), 34);
             ((RectTransform)next.transform).sizeDelta = new Vector2(60, 56);
             next.onClick.AddListener(() => GoPage(1));
 
-            var add = UiFactory.Button("AddPage", brt, "＋ Page", new Color(0.20f, 0.45f, 0.55f), 24);
+            var add = UiFactory.Button("AddPage", brt, "+ Page", new Color(0.20f, 0.45f, 0.55f), 24);
             ((RectTransform)add.transform).sizeDelta = new Vector2(160, 56);
             add.onClick.AddListener(AddPage);
         }

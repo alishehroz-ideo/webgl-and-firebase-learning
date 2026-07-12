@@ -33,15 +33,41 @@ namespace BookLab.Features.MainMenu
             crt.sizeDelta = new Vector2(300, 80);
             createBtn.onClick.AddListener(() => EventBus.Publish(new CreateBookRequest()));
 
-            var gridGO = new GameObject("Grid", typeof(RectTransform), typeof(GridLayoutGroup));
-            _grid = (RectTransform)gridGO.transform;
-            _grid.SetParent(bg, false);
-            _grid.anchorMin = Vector2.zero; _grid.anchorMax = Vector2.one;
-            _grid.offsetMin = new Vector2(60, 60); _grid.offsetMax = new Vector2(-60, -160);
-            var glg = gridGO.GetComponent<GridLayoutGroup>();
+            // Scrollable area for the shelf
+            var scrollGO = new GameObject("Scroll", typeof(RectTransform), typeof(ScrollRect));
+            var scrollRt = (RectTransform)scrollGO.transform;
+            scrollRt.SetParent(bg, false);
+            scrollRt.anchorMin = Vector2.zero; scrollRt.anchorMax = Vector2.one;
+            scrollRt.offsetMin = new Vector2(60, 40); scrollRt.offsetMax = new Vector2(-60, -160);
+            var scroll = scrollGO.GetComponent<ScrollRect>();
+            scroll.horizontal = false; scroll.vertical = true;
+            scroll.movementType = ScrollRect.MovementType.Clamped;
+            scroll.scrollSensitivity = 40;
+
+            // Viewport (masks content) with an invisible raycast catcher so wheel/drag works anywhere
+            var viewportGO = new GameObject("Viewport", typeof(RectTransform), typeof(Image), typeof(RectMask2D));
+            var viewportRt = (RectTransform)viewportGO.transform;
+            viewportRt.SetParent(scrollRt, false);
+            UiFactory.Stretch(viewportRt);
+            viewportGO.GetComponent<Image>().color = new Color(1, 1, 1, 0);   // invisible, still catches input
+
+            // Content: the grid, height driven by a ContentSizeFitter so it grows + scrolls
+            var contentGO = new GameObject("Content", typeof(RectTransform), typeof(GridLayoutGroup), typeof(ContentSizeFitter));
+            _grid = (RectTransform)contentGO.transform;
+            _grid.SetParent(viewportRt, false);
+            _grid.anchorMin = new Vector2(0, 1); _grid.anchorMax = new Vector2(1, 1); _grid.pivot = new Vector2(0.5f, 1);
+            _grid.anchoredPosition = Vector2.zero;
+            var glg = contentGO.GetComponent<GridLayoutGroup>();
             glg.cellSize = new Vector2(300, 380);
             glg.spacing = new Vector2(40, 40);
+            glg.padding = new RectOffset(10, 10, 10, 10);
             glg.childAlignment = TextAnchor.UpperCenter;
+            var fitter = contentGO.GetComponent<ContentSizeFitter>();
+            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+
+            scroll.viewport = viewportRt;
+            scroll.content = _grid;
 
             Refresh();
         }

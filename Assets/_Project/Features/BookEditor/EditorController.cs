@@ -170,22 +170,19 @@ namespace BookLab.Features.BookEditor
                 SpawnSticker(obj);
         }
 
-        // ---- backgrounds (bottom strip) ----
+        // ---- backgrounds (bottom strip, horizontal scroll) ----
         void BuildBackgroundPicker()
         {
-            var strip = UiFactory.Panel("BgPicker", _root, new Color(0f, 0f, 0f, 0.55f));
-            strip.anchorMin = new Vector2(0, 0); strip.anchorMax = new Vector2(1, 0); strip.pivot = new Vector2(0.5f, 0);
-            strip.anchoredPosition = Vector2.zero; strip.sizeDelta = new Vector2(0, 180);
-            var hlg = strip.gameObject.AddComponent<HorizontalLayoutGroup>();
-            hlg.spacing = 20; hlg.padding = new RectOffset(200, 24, 20, 20);
-            hlg.childAlignment = TextAnchor.MiddleLeft;
-            hlg.childControlWidth = false; hlg.childControlHeight = false;
-            hlg.childForceExpandWidth = false; hlg.childForceExpandHeight = false;
+            var content = MakeScrollArea("BgPicker", true, frame =>
+            {
+                frame.anchorMin = new Vector2(0, 0); frame.anchorMax = new Vector2(1, 0); frame.pivot = new Vector2(0.5f, 0);
+                frame.anchoredPosition = Vector2.zero; frame.sizeDelta = new Vector2(0, 180);
+            });
 
             foreach (var kv in _catalog.backgrounds)
             {
                 var def = kv.Value;
-                var b = UiFactory.Button($"bg_{def.id}", strip, "", new Color(0.25f, 0.25f, 0.30f));
+                var b = UiFactory.Button($"bg_{def.id}", content, "", new Color(0.25f, 0.25f, 0.30f));
                 ((RectTransform)b.transform).sizeDelta = new Vector2(200, 130);
                 var thumb = UiFactory.Image("thumb", b.transform);
                 UiFactory.Stretch(thumb.rectTransform); thumb.raycastTarget = false; thumb.preserveAspect = true;
@@ -198,23 +195,20 @@ namespace BookLab.Features.BookEditor
             }
         }
 
-        // ---- stickers (left panel) ----
+        // ---- stickers (left panel, vertical scroll) ----
         void BuildStickerPicker()
         {
-            var panel = UiFactory.Panel("StickerPicker", _root, new Color(0f, 0f, 0f, 0.55f));
-            panel.anchorMin = new Vector2(0, 0); panel.anchorMax = new Vector2(0, 1);
-            panel.offsetMin = new Vector2(0, 190);
-            panel.offsetMax = new Vector2(160, -180);
-            var vlg = panel.gameObject.AddComponent<VerticalLayoutGroup>();
-            vlg.spacing = 14; vlg.padding = new RectOffset(16, 16, 16, 16);
-            vlg.childAlignment = TextAnchor.UpperCenter;
-            vlg.childControlWidth = false; vlg.childControlHeight = false;
-            vlg.childForceExpandWidth = false; vlg.childForceExpandHeight = false;
+            var content = MakeScrollArea("StickerPicker", false, frame =>
+            {
+                frame.anchorMin = new Vector2(0, 0); frame.anchorMax = new Vector2(0, 1);
+                frame.offsetMin = new Vector2(0, 190);
+                frame.offsetMax = new Vector2(160, -180);
+            });
 
             foreach (var kv in _catalog.objects)
             {
                 var def = kv.Value;
-                var b = UiFactory.Button($"st_{def.id}", panel, "", new Color(0.25f, 0.25f, 0.30f));
+                var b = UiFactory.Button($"st_{def.id}", content, "", new Color(0.25f, 0.25f, 0.30f));
                 ((RectTransform)b.transform).sizeDelta = new Vector2(120, 120);
                 var thumb = UiFactory.Image("thumb", b.transform);
                 UiFactory.Stretch(thumb.rectTransform); thumb.raycastTarget = false; thumb.preserveAspect = true;
@@ -223,6 +217,61 @@ namespace BookLab.Features.BookEditor
                 string id = def.id;
                 b.onClick.AddListener(() => AddSticker(id));
             }
+        }
+
+        // Builds a scrollable frame (frame + masked viewport + content) and returns the
+        // Content transform to add items to. horizontal=true -> horizontal scroll, else vertical.
+        RectTransform MakeScrollArea(string name, bool horizontal, System.Action<RectTransform> placeFrame)
+        {
+            var frameGO = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(ScrollRect));
+            var frameRt = (RectTransform)frameGO.transform;
+            frameRt.SetParent(_root, false);
+            placeFrame(frameRt);
+            frameGO.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.55f);
+
+            var scroll = frameGO.GetComponent<ScrollRect>();
+            scroll.horizontal = horizontal; scroll.vertical = !horizontal;
+            scroll.movementType = ScrollRect.MovementType.Clamped;
+            scroll.scrollSensitivity = 40;
+
+            var vpGO = new GameObject("Viewport", typeof(RectTransform), typeof(Image), typeof(RectMask2D));
+            var vpRt = (RectTransform)vpGO.transform;
+            vpRt.SetParent(frameRt, false);
+            UiFactory.Stretch(vpRt);
+            vpGO.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);   // invisible, still catches wheel/drag
+
+            var contentGO = new GameObject("Content", typeof(RectTransform), typeof(ContentSizeFitter));
+            var contentRt = (RectTransform)contentGO.transform;
+            contentRt.SetParent(vpRt, false);
+            var fit = contentGO.GetComponent<ContentSizeFitter>();
+
+            if (horizontal)
+            {
+                contentRt.anchorMin = new Vector2(0, 0); contentRt.anchorMax = new Vector2(0, 1); contentRt.pivot = new Vector2(0, 0.5f);
+                var hlg = contentGO.AddComponent<HorizontalLayoutGroup>();
+                hlg.spacing = 18; hlg.padding = new RectOffset(18, 18, 16, 16);
+                hlg.childAlignment = TextAnchor.MiddleLeft;
+                hlg.childControlWidth = false; hlg.childControlHeight = false;
+                hlg.childForceExpandWidth = false; hlg.childForceExpandHeight = false;
+                fit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                fit.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            }
+            else
+            {
+                contentRt.anchorMin = new Vector2(0, 1); contentRt.anchorMax = new Vector2(1, 1); contentRt.pivot = new Vector2(0.5f, 1);
+                var vlg = contentGO.AddComponent<VerticalLayoutGroup>();
+                vlg.spacing = 14; vlg.padding = new RectOffset(16, 16, 16, 16);
+                vlg.childAlignment = TextAnchor.UpperCenter;
+                vlg.childControlWidth = false; vlg.childControlHeight = false;
+                vlg.childForceExpandWidth = false; vlg.childForceExpandHeight = false;
+                fit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                fit.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            }
+            contentRt.anchoredPosition = Vector2.zero;
+
+            scroll.viewport = vpRt;
+            scroll.content = contentRt;
+            return contentRt;
         }
 
         async void LoadThumb(Image img, string url)

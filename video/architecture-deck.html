@@ -28,7 +28,7 @@
   .dots a:focus-visible{box-shadow:0 0 0 3px var(--sea)}
 
   .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
-    max-width:var(--maxw);margin:0 auto;padding:60px 44px;gap:22px}
+    max-width:var(--maxw);margin:0 auto;padding:44px 44px;gap:18px}
   .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--sea);display:flex;align-items:center;gap:12px}
   .eyebrow .n{color:var(--faint)}
   .eyebrow::before{content:"";width:34px;height:1px;background:var(--sea);opacity:.6}
@@ -60,7 +60,7 @@
   @media (max-width:820px){.cover-grid{grid-template-columns:1fr}.page-card{justify-self:start;max-width:100%}}
 
   /* generic node */
-  .node{background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px 16px;min-width:0}
+  .node{background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:11px 15px;min-width:0}
   .node .t{font-weight:700;font-size:15px;letter-spacing:-.01em}
   .node .s{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:3px;line-height:1.35}
   .node.warm{border-color:rgba(230,171,92,.45);box-shadow:0 0 0 1px var(--sand-dim) inset}
@@ -71,11 +71,11 @@
 
   /* ARCHITECTURE stack */
   .arch{display:flex;flex-direction:column;gap:0}
-  .layer{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center;padding:12px 0}
+  .layer{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center;padding:7px 0}
   .layer .lab{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);text-align:right}
   .row{display:flex;gap:12px;flex-wrap:wrap}
   .row>.node{flex:1 1 0}
-  .conn{grid-column:2;height:20px;position:relative}
+  .conn{grid-column:2;height:13px;position:relative}
   .conn::before{content:"";position:absolute;left:26px;top:0;bottom:0;width:2px;background:linear-gradient(var(--line2),transparent);transform:scaleY(0);transform-origin:top;transition:transform .5s ease}
   .arch.in .conn::before{transform:scaleY(1)}
   .arch .layer{opacity:0;transform:translateY(14px);transition:.55s ease}
@@ -304,14 +304,14 @@
 <!-- 6 · AI -->
 <section id="s6" class="slide reveal">
   <div class="eyebrow"><span class="n">06</span> Use of AI tools</div>
-  <h2>Developer-led, AI-accelerated.</h2>
+  <h2>Built with Claude Code as a pair-programmer.</h2>
   <ul class="clean">
-    <li><b>The direction was mine</b> — the requirements, the layered MVC + event-driven architecture, the data model, and the trade-offs. I set the plan; Claude Code executed against it.</li>
-    <li><b>Pair-programming, at speed</b> — I turned that plan into code fast — models, the REST client, save/load, the cache, the screens — reviewing and steering every step.</li>
-    <li><b>A debugging partner</b> — I diagnosed the hard WebGL + Firebase problems (the SDK gap, the compressed-build boot); Claude Code helped iterate on the fixes.</li>
-    <li><b>CLI on tap</b> — Firebase project, data seeding, and Hosting deploys, driven through it to stay in flow.</li>
+    <li><b>Planning &amp; architecture</b> — we talked through the brief and shaped the structure together: layered MVC + event-driven, mirrored from a REST-in-WebGL pattern I trust.</li>
+    <li><b>Implementation</b> — it wrote much of the code alongside me — the data models, the REST Firebase client, save/load, the two-tier cache, the screens — which I reviewed and adjusted as we went.</li>
+    <li><b>Debugging the hard parts</b> — a real help on the tricky WebGL + Firebase issues: the SDK not supporting WebGL, and getting the compressed build to boot on Hosting.</li>
+    <li><b>Ops from the CLI</b> — Firebase project setup, seeding data, and deploys, kept fast.</li>
   </ul>
-  <p class="lead" style="font-size:16px">Every line was <b class="green">read, understood, and mine to defend</b>. Claude Code was a power tool — the engineering judgement, and the ownership, are mine.</p>
+  <p class="lead" style="font-size:16px">It sped the build up a lot. I set the direction, made the calls, and reviewed everything — so I understand every part and can extend it.</p>
 </section>
 
 <!-- 7 · WRAP -->
@@ -340,15 +340,22 @@
   function buildStops(){
     var vh=window.innerHeight, out=[];
     sections.forEach(function(s){
-      var top=s.offsetTop, h=s.offsetHeight, bottom=top+h-vh;
-      out.push({y:Math.round(top), sec:s, top:true});          // land on the section's top
-      if(h>vh+8){                                              // taller than screen → add inner stops
-        var n=Math.ceil((h-vh)/(vh*0.86));
-        for(var i=1;i<=n;i++) out.push({y:Math.round(Math.min(bottom, top+i*(vh*0.86))), sec:s, top:false});
+      var top=Math.round(s.offsetTop), h=s.offsetHeight, bottom=Math.round(top+h-vh);
+      out.push({y:top, sec:s, top:true});                     // section start (always a stop)
+      // Only paginate a section that overflows the screen by a MEANINGFUL amount (>40% of a
+      // screen). Otherwise it's one stop and ↓ flies straight to the next slide (no tiny nudge).
+      if(bottom-top > vh*0.4){
+        var y=top+vh*0.82;
+        while(true){
+          var sy=Math.min(bottom, Math.round(y));
+          out.push({y:sy, sec:s, top:false});
+          if(sy>=bottom) break;
+          y+=vh*0.82;
+        }
       }
     });
     out.sort(function(a,b){return a.y-b.y;});
-    stops=out.filter(function(o,i){return i===0 || Math.abs(o.y-out[i-1].y)>4;});
+    stops=out;
   }
   function setDotByY(y){
     var idx=0, mid=y+window.innerHeight*0.4;

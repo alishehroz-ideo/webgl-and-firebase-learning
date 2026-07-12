@@ -42,7 +42,7 @@ Covers all six required points: ① overview · ② architecture · ③ asset lo
 ### 7 · Use of AI tools  (~0:35)
 🎬 **SHOW:** Deck — **AI tools** slide.
 🎙 **SAY:**
-> "On AI — I led this project end to end. The requirements, the architecture, the data model, and every trade-off were my calls. I used Claude Code as a pair-programmer to implement that plan quickly, and to iterate on the hard WebGL and Firebase bugs — but I reviewed and steered every step, and I can defend every line. It was a power tool; the engineering judgement, and the ownership, are mine."
+> "I built this with Claude Code as a pair-programmer. We planned the architecture together, and it wrote a lot of the code alongside me — the models, the Firebase client, the save-and-load, the cache, the screens — which I reviewed and adjusted as we went. It was a real help debugging the tricky WebGL and Firebase issues, and it drove the Firebase setup and deploys from the command line. It sped the build up a lot — and I set the direction, made the calls, and reviewed everything, so I understand every part and can extend it."
 
 ### 8 · Wrap  (~0:15)
 🎬 **SHOW:** Deck — **Wrap** slide (live link) → optionally cut to the live app one more time.

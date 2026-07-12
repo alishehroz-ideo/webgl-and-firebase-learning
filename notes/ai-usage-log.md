@@ -1,15 +1,15 @@
 # AI Tools Usage Log
 ### (for the "Any use of AI tools and how they supported your work" deliverable)
 
-**Tool:** Claude Code (Claude Opus 4.8) in VS Code — used as a pair-programmer, under my direction.
+**Tool:** Claude Code (Claude Opus 4.8) in VS Code, used as a pair-programmer.
 
-**My role vs. the tool.** I led the project end to end: I set the requirements, chose the architecture (layered **MVC + event-driven**, mirrored from a REST-in-WebGL pattern I already trusted), designed the data model, and made every trade-off. Claude Code executed against that plan and helped me move faster — and I reviewed and steered every step.
+I built BookLab with Claude Code as a pair-programmer. It genuinely sped the work up — while I set the direction, made the decisions, and reviewed everything, so I understand every part and can extend it.
 
-**Where it helped:**
+**How it supported the work:**
 
-- **Implementing the plan quickly** — turning my architecture into working code (data models, the REST `FirebaseClient`, the `ContentApi` save/load layer, the two-tier `AssetService` cache, and the screens), which I reviewed and adjusted.
-- **Debugging the hard problems** — I diagnosed the WebGL/Firebase issues (the Firebase Unity SDK not supporting WebGL; the compressed build failing to boot on Hosting); it helped me iterate on the fixes fast.
-- **CLI operations** — Firebase project creation, seeding the database, and Hosting deploys, driven through it to stay in flow.
-- **Pressure-testing decisions** — sanity-checking the trade-offs as I made them (free-tier cost, the caching approach, scalability to many users).
+- **Planning & architecture** — we talked through the brief and shaped the structure together: a layered **MVC + event-driven** design, mirrored from a REST-in-WebGL pattern I trust.
+- **Implementation** — it wrote much of the code alongside me: the data models, the REST `FirebaseClient`, the `ContentApi` save/load layer, the two-tier `AssetService` cache, and the screens — which I reviewed and adjusted as we went.
+- **Debugging the hard parts** — a real help on the tricky WebGL + Firebase issues: the Firebase Unity SDK not supporting WebGL, and getting the compressed build to boot on Hosting.
+- **Ops from the CLI** — Firebase project setup, seeding the database, and Hosting deploys, kept fast.
 
-**Ownership.** Every line was read, understood, and is mine to defend. The engineering judgement and the decisions were mine — the tool accelerated the work, it didn't replace it.
+The build was quicker for it — and I set the direction, made the calls, and reviewed everything, so the work and the understanding are mine.

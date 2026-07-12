@@ -1,11 +1,30 @@
 {
   "backgrounds": {
-    "bg_livingroom": { "name": "Living Room", "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/living_room.png" },
-    "bg_garden":     { "name": "Garden",      "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/garden.png" }
+    "bg_desert":        { "name": "Desert",        "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/desert-bg.png" },
+    "bg_desert_sunset": { "name": "Desert Sunset", "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/desert-sunset-bg.png" },
+    "bg_oasis":         { "name": "Oasis",         "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/desert-oasis-bg.png" },
+    "bg_wadi":          { "name": "Wadi",          "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/desert-wadi-bg.png" },
+    "bg_desert_night":  { "name": "Desert Night",  "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/desert-night-bg.png" },
+    "bg_beach":         { "name": "Beach",         "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/beach-bg.png" },
+    "bg_beach_sunset":  { "name": "Beach Sunset",  "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/beach-sunset-bg.png" },
+    "bg_ocean":         { "name": "Ocean",         "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/ocean-bg.png" },
+    "bg_harbour":       { "name": "Harbour",       "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/harbour-bg.png" },
+    "bg_shallows":      { "name": "Shallows",      "url": "https://adeeb-booklab-07111926.web.app/assets/backgrounds/shallow-water-bg.png" }
   },
   "objects": {
-    "furn_sofa": { "name": "Sofa", "url": "https://adeeb-booklab-07111926.web.app/assets/objects/sofa.png" },
-    "furn_lamp": { "name": "Lamp", "url": "https://adeeb-booklab-07111926.web.app/assets/objects/lamp.png" },
-    "furn_tree": { "name": "Tree", "url": "https://adeeb-booklab-07111926.web.app/assets/objects/tree.png" }
+    "obj_camel":  { "name": "Camel",  "url": "https://adeeb-booklab-07111926.web.app/assets/objects/camel.png" },
+    "obj_palm":   { "name": "Palm",   "url": "https://adeeb-booklab-07111926.web.app/assets/objects/palm.png" },
+    "obj_cactus": { "name": "Cactus", "url": "https://adeeb-booklab-07111926.web.app/assets/objects/cactus.png" },
+    "obj_tent":   { "name": "Tent",   "url": "https://adeeb-booklab-07111926.web.app/assets/objects/tent.png" },
+    "obj_sun":    { "name": "Sun",    "url": "https://adeeb-booklab-07111926.web.app/assets/objects/sun.png" },
+    "obj_star":   { "name": "Star",   "url": "https://adeeb-booklab-07111926.web.app/assets/objects/star.png" },
+    "obj_bird":   { "name": "Bird",   "url": "https://adeeb-booklab-07111926.web.app/assets/objects/bird.png" },
+    "obj_flower": { "name": "Flower", "url": "https://adeeb-booklab-07111926.web.app/assets/objects/flower.png" },
+    "obj_boat":   { "name": "Boat",   "url": "https://adeeb-booklab-07111926.web.app/assets/objects/boat.png" },
+    "obj_turtle": { "name": "Turtle", "url": "https://adeeb-booklab-07111926.web.app/assets/objects/turtle.png" },
+    "obj_fish":   { "name": "Fish",   "url": "https://adeeb-booklab-07111926.web.app/assets/objects/fish.png" },
+    "obj_crab":   { "name": "Crab",   "url": "https://adeeb-booklab-07111926.web.app/assets/objects/crab.png" },
+    "obj_shell":  { "name": "Shell",  "url": "https://adeeb-booklab-07111926.web.app/assets/objects/shell.png" },
+    "obj_wave":   { "name": "Wave",   "url": "https://adeeb-booklab-07111926.web.app/assets/objects/wave.png" }
   }
 }

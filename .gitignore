@@ -100,3 +100,6 @@ ui-debug.log
 /public/TemplateData/
 /public/StreamingAssets/
 /public/index.html
+
+# Local art staging (the served copies live in public/assets/)
+/images/

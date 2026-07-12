@@ -88,6 +88,17 @@
   .callouts{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
   .callout{font-family:var(--mono);font-size:12px;padding:7px 12px;border-radius:8px;border:1px dashed var(--line2);color:var(--muted)}
   .callout b{color:var(--sand)} .callout.evt b{color:var(--sea)}
+  /* architecture slide — compacted so all 5 layers + callouts fit one screen */
+  #s2{gap:12px}
+  #s2 h2{font-size:clamp(26px,3.2vw,35px)}
+  #s2 .lead{font-size:15.5px;max-width:74ch}
+  #s2 .arch .layer{padding:4px 0}
+  #s2 .arch .node{padding:9px 14px}
+  #s2 .arch .node .t{font-size:14px}
+  #s2 .arch .node .s{font-size:10.5px;margin-top:2px}
+  #s2 .arch .conn{height:7px}
+  #s2 .callouts{margin-top:0}
+  #s2 .callout{padding:5px 11px;font-size:11px}
 
   /* FLOW (horizontal, with travelling dot) */
   .flow{display:flex;flex-direction:column;gap:14px}
@@ -209,7 +220,7 @@
 <section id="s2" class="slide reveal">
   <div class="eyebrow"><span class="n">02</span> Architecture</div>
   <h2>Layered: <span class="sand">MVC</span> for structure, an <span class="sea">event bus</span> for flow.</h2>
-  <p class="lead">Each layer has one job and only talks downward. Screens never reference each other — they announce events, and a tiny <span class="mono">AppRoot</span> swaps them.</p>
+  <p class="lead">Each layer has one job and talks only downward. Screens never call each other — they publish events, and <span class="mono">AppRoot</span> swaps them.</p>
 
   <div class="arch">
     <div class="layer"><div class="lab">App</div><div class="row">

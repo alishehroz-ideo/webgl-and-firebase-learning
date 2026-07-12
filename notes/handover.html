@@ -1,0 +1,256 @@
+<title>BookLab — Handover Document</title>
+<style>
+  :root{
+    --bg:#faf8f3; --surface:#ffffff; --ink:#1b1d24; --muted:#59616f; --faint:#8a8f9c;
+    --line:#e8e2d6; --code-bg:#f4f1e9; --code-ink:#43474f;
+    --sand:#b06f14; --sea:#1c7a90; --good:#2f8a57;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,monospace;
+    --measure:74ch;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0f1117; --surface:#161a23; --ink:#ecedf3; --muted:#9aa1b1; --faint:#6b7280;
+      --line:#272d3a; --code-bg:#12151d; --code-ink:#c7cedb; --sand:#e4a959; --sea:#49b6cf; --good:#54b57e; }
+  }
+  :root[data-theme="light"]{ --bg:#faf8f3; --surface:#ffffff; --ink:#1b1d24; --muted:#59616f; --faint:#8a8f9c;
+    --line:#e8e2d6; --code-bg:#f4f1e9; --code-ink:#43474f; --sand:#b06f14; --sea:#1c7a90; --good:#2f8a57; }
+  :root[data-theme="dark"]{ --bg:#0f1117; --surface:#161a23; --ink:#ecedf3; --muted:#9aa1b1; --faint:#6b7280;
+    --line:#272d3a; --code-bg:#12151d; --code-ink:#c7cedb; --sand:#e4a959; --sea:#49b6cf; --good:#54b57e; }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:64px 32px 120px}
+  a{color:var(--sea);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--sea) 35%,transparent)}
+  a:hover{border-bottom-color:var(--sea)}
+  code,.mono{font-family:var(--mono);font-size:.9em}
+  p code,li code,td code{background:var(--code-bg);color:var(--code-ink);padding:1px 5px;border-radius:4px;font-size:.85em}
+
+  /* header */
+  header.doc{border-bottom:2px solid var(--ink);padding-bottom:22px;margin-bottom:8px}
+  .kicker{font-family:var(--mono);font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--sea);margin:0 0 12px}
+  header.doc h1{font-size:clamp(32px,5vw,46px);line-height:1.05;letter-spacing:-.02em;margin:0;font-weight:800;text-wrap:balance}
+  header.doc .sub{font-size:19px;color:var(--muted);margin:10px 0 0}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:20px;font-size:14px;color:var(--muted)}
+  .meta b{color:var(--ink);font-weight:600}
+  .meta a{font-family:var(--mono);font-size:13px}
+
+  /* contents */
+  nav.toc{margin:34px 0 46px;padding:18px 22px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+  nav.toc h2{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:0 0 12px;font-family:var(--mono)}
+  nav.toc ol{margin:0;padding-left:20px;columns:2;column-gap:36px}
+  nav.toc li{margin:5px 0;break-inside:avoid}
+  nav.toc a{border:none;color:var(--ink)} nav.toc a:hover{color:var(--sea)}
+
+  section{margin:0 0 42px}
+  h2.sec{font-size:26px;letter-spacing:-.01em;margin:48px 0 4px;font-weight:800;display:flex;gap:14px;align-items:baseline;scroll-margin-top:20px}
+  h2.sec .no{font-family:var(--mono);font-size:15px;color:var(--sand);font-weight:700}
+  h2.sec::after{content:"";flex:1;height:2px;background:var(--line);align-self:center;margin-left:6px}
+  h3{font-size:18px;margin:26px 0 6px;letter-spacing:-.01em}
+  p{margin:12px 0;max-width:var(--measure)}
+  ul,ol.body{max-width:var(--measure);padding-left:22px;margin:12px 0}
+  li{margin:7px 0}
+  .lead{font-size:18.5px;color:var(--muted)}
+  strong{font-weight:650}
+
+  pre{background:var(--code-bg);color:var(--code-ink);border:1px solid var(--line);border-radius:10px;
+    padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.6;margin:16px 0}
+  pre .c{color:var(--faint)} pre .k{color:var(--sea)} pre .v{color:var(--sand)}
+
+  .callout{border-left:3px solid var(--sand);background:var(--surface);border-radius:0 10px 10px 0;
+    padding:14px 18px;margin:18px 0;max-width:var(--measure)}
+  .callout.sea{border-left-color:var(--sea)}
+  .callout .lbl{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--sand);font-weight:700}
+  .callout.sea .lbl{color:var(--sea)}
+  .callout p{margin:5px 0 0}
+
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px;display:block;overflow-x:auto}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);font-weight:600}
+  td b{font-weight:600}
+
+  .layers{list-style:none;padding:0;margin:16px 0;max-width:var(--measure)}
+  .layers li{display:grid;grid-template-columns:120px 1fr;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);margin:0}
+  .layers .n{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--sea);padding-top:2px}
+
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--faint);font-family:var(--mono)}
+
+  @media (max-width:640px){ nav.toc ol{columns:1} .layers li{grid-template-columns:1fr} .wrap{padding:40px 20px 80px} }
+  @media print{
+    :root{--bg:#fff;--surface:#fff}
+    body{font-size:11pt}
+    .wrap{max-width:none;padding:0 8mm}
+    h2.sec,pre,.callout,table,.layers li{break-inside:avoid}
+    h2.sec,h3{break-after:avoid}
+    a{color:var(--ink)}
+    nav.toc{background:#fff}
+  }
+</style>
+
+<div class="wrap">
+  <header class="doc">
+    <p class="kicker">Handover Document · Task 1</p>
+    <h1>BookLab</h1>
+    <p class="sub">Interactive Content Creation — a WebGL book-maker for kids, on Firebase.</p>
+    <div class="meta">
+      <span><b>Author</b> Ali Shehroz</span>
+      <span><b>For</b> Adeeb · Phase 1 Technical Assessment</span>
+      <span><b>Live</b> <a href="https://adeeb-booklab-07111926.web.app">adeeb-booklab-07111926.web.app</a></span>
+      <span><b>Repo</b> <a href="https://github.com/alishehroz-ideo/webgl-and-firebase-learning">github.com/alishehroz-ideo/webgl-and-firebase-learning</a></span>
+      <span><b>Stack</b> Unity 6 WebGL · Firebase (Realtime DB + Hosting) · REST</span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#assets">Asset loading &amp; caching</a></li>
+      <li><a href="#data">How data is saved &amp; loaded</a></li>
+      <li><a href="#challenges">Key decisions &amp; challenges</a></li>
+      <li><a href="#scale">Performance &amp; scalability</a></li>
+      <li><a href="#ai">Use of AI tools</a></li>
+      <li><a href="#run">Tech stack, running &amp; deploying</a></li>
+    </ol>
+  </nav>
+
+  <section>
+    <h2 class="sec" id="overview"><span class="no">01</span> Overview</h2>
+    <p class="lead">BookLab is a browser-based storybook maker for children. A child picks a scene, drags and scales stickers across one or more pages, names and saves the book to the cloud, and it appears as a cover-card on their shelf to read back.</p>
+    <p>It is a <strong>Unity WebGL</strong> application served in the browser, with all content and assets on <strong>Firebase</strong> — running entirely on the free (Spark) plan. The whole experience is a single <strong>create → save → read</strong> loop across three screens:</p>
+    <ul>
+      <li><strong>Main Menu</strong> — the shelf of saved books, shown as cover-cards, plus a <em>Create New</em> button.</li>
+      <li><strong>Editor</strong> — pick a background, drop / drag / scale / delete stickers, add multiple pages, name it, save.</li>
+      <li><strong>Playback</strong> — open a saved book and flip through its pages, read-only.</li>
+    </ul>
+    <p>It targets <strong>1920×1080</strong> and scales to any screen via a CanvasScaler reference resolution.</p>
+  </section>
+
+  <section>
+    <h2 class="sec" id="architecture"><span class="no">02</span> Architecture</h2>
+    <p>The code follows a clear <strong>MVC + event-driven</strong> pattern, organised into layers where each layer has one responsibility and only depends downward.</p>
+    <ul class="layers">
+      <li><span class="n">App</span><span><b>Bootstrap</b> auto-starts the app and builds the Full-HD canvas + input; <b>AppRoot</b> owns the single canvas and swaps the active screen.</span></li>
+      <li><span class="n">Features · MVC</span><span><b>MainMenu</b>, <b>Editor</b>, <b>Playback</b> — each a Controller (logic) plus a code-built View.</span></li>
+      <li><span class="n">Services</span><span><b>ContentApi</b> — the typed “front door”: <code>SaveBook</code> / <code>LoadBook</code> / <code>ListBooks</code> / <code>GetCatalog</code>. The app never touches URLs or JSON directly.</span></li>
+      <li><span class="n">Core</span><span><b>FirebaseClient</b> (the only code that touches the network) + <b>FirebaseEndpoints</b> (all URLs in one place); <b>EventBus</b> (publish/subscribe); <b>AssetService</b> (the two-tier image cache); <b>UiFactory</b> (code-built UI helpers).</span></li>
+      <li><span class="n">Models · “M”</span><span><b>BookModel → PageModel → PlacedObjectModel</b> and <b>AssetCatalog</b> — pure data, no Unity dependencies.</span></li>
+    </ul>
+    <h3>Event-driven navigation</h3>
+    <p>Screens never reference one another. They <strong>publish</strong> navigation events on the <code>EventBus</code> — <code>OpenBookRequest</code>, <code>CreateBookRequest</code>, <code>GoHomeRequest</code> — and <code>AppRoot</code> subscribes and swaps the screen. This keeps every feature decoupled and independently testable, and makes adding a screen a local change.</p>
+    <div class="callout sea">
+      <span class="lbl">Why this matters</span>
+      <p>MVC keeps data, view, and logic separate; the event bus keeps the screens from knowing about each other. Together they make the codebase easy to read, extend, and reason about — which is what "scalable systems" means here.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec" id="assets"><span class="no">03</span> Asset loading &amp; caching</h2>
+    <p>Backgrounds and stickers are <strong>not baked into the build</strong>. A catalog in Firebase lists each asset's <code>id</code>, <code>name</code>, and <code>url</code>; the picker menus are built from it, and an image is downloaded <strong>only when it is first shown</strong> (opening a picker, placing or viewing an item).</p>
+    <h3>Two-tier cache (<code>AssetService</code>)</h3>
+    <ol class="body">
+      <li><strong>Memory</strong> — a <code>Dictionary&lt;url, Sprite&gt;</code>, instant reuse for the session.</li>
+      <li><strong>Disk</strong> — the downloaded bytes are written to <code>Application.persistentDataPath</code>, which in WebGL is the browser's <strong>IndexedDB</strong>, so they survive page reloads.</li>
+    </ol>
+    <p>The lookup order is <strong>memory → disk → download</strong> (via <code>UnityWebRequest</code>), storing into both tiers on a miss. Concurrent requests for the same URL are <strong>de-duplicated in flight</strong> (a <code>Dictionary&lt;url, Task&lt;Sprite&gt;&gt;</code>), so an asset never downloads twice.</p>
+    <h3>WebGL caching limitations</h3>
+    <ul>
+      <li><code>persistentDataPath</code> is not a real filesystem — it is IndexedDB, flushed asynchronously, so a copy can be lost if the tab closes the instant after a download.</li>
+      <li>IndexedDB is <strong>per-browser and per-origin</strong> (not shared across browsers or devices), has a <strong>storage quota</strong>, and can be <strong>evicted</strong> by the browser under pressure or cleared by the user.</li>
+      <li>WebGL is <strong>single-threaded</strong> — there are no background threads, so all downloads run on the main thread. This is exactly why "download once, reuse" matters for smoothness.</li>
+      <li>A limited memory heap means too many large textures can exhaust memory; a production build would add an LRU eviction policy on the memory tier.</li>
+    </ul>
+    <div class="callout">
+      <span class="lbl">Mental model</span>
+      <p>The cache is a <b>fridge</b> (fast, limited, per-browser, evicts old items); the cloud + CDN is the <b>warehouse</b> (has everything, always restockable). A cache miss simply re-downloads — no data is lost.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec" id="data"><span class="no">04</span> How data is saved &amp; loaded</h2>
+    <h3>The "recipe" model</h3>
+    <p>A saved book stores <strong>references and numbers, never image bytes</strong>. Each placed object records which asset it is and where it sits, as <strong>normalized 0–1 coordinates</strong> — so a book created at one resolution replays correctly at any other.</p>
+<pre><span class="c">// one placed sticker</span>
+{ <span class="k">"assetId"</span>: <span class="v">"obj_camel"</span>, <span class="k">"x"</span>: <span class="v">0.62</span>, <span class="k">"y"</span>: <span class="v">0.55</span>, <span class="k">"scale"</span>: <span class="v">0.8</span>, <span class="k">"rotation"</span>: <span class="v">0</span>, <span class="k">"z"</span>: <span class="v">1</span> }
+
+<span class="c">// a book = title + timestamps + pages (each page = background + placed objects)</span>
+BookModel → PageModel[] → PlacedObjectModel[]</pre>
+    <h3>Firebase over REST (no SDK)</h3>
+    <p>The Firebase Unity SDK <strong>does not support WebGL</strong>, so every data operation uses the <strong>Realtime Database REST API</strong> through <code>UnityWebRequest</code>: <code>GET</code> on <code>/path.json</code> to read, <code>PUT</code> to write. Async is achieved by wrapping the callback-based request in a <code>TaskCompletionSource</code>, giving clean <code>async/await</code> with no coroutines and no blocking the frame.</p>
+    <table>
+      <tr><th>Action</th><th>Request</th></tr>
+      <tr><td>Read the picker catalog</td><td><code>GET /assetCatalog.json</code></td></tr>
+      <tr><td>List a child's books (shelf)</td><td><code>GET /books/{kidId}.json</code></td></tr>
+      <tr><td>Load one book</td><td><code>GET /books/{kidId}/{bookId}.json</code></td></tr>
+      <tr><td><b>Save</b> a book</td><td><code>PUT /books/{kidId}/{bookId}.json</code></td></tr>
+    </table>
+    <p>Books are stored under a per-child path (<code>/books/{kidId}/…</code>) — a single <code>demo</code> id in this build, but the structure is deliberately ready to scale (see §6). JSON is parsed with <strong>Newtonsoft</strong>, because the Realtime Database returns objects keyed by id, which Unity's built-in <code>JsonUtility</code> cannot handle. On save, the shelf card uses the first page's background as its cover (a true page snapshot is reserved; keeping the cover inline avoids paid Firebase Storage).</p>
+  </section>
+
+  <section>
+    <h2 class="sec" id="challenges"><span class="no">05</span> Key decisions &amp; challenges</h2>
+    <h3>REST, not the SDK</h3>
+    <p>The Firebase Unity SDK is unavailable in WebGL, so the entire data layer is REST over <code>UnityWebRequest</code> — the WebGL-safe path, and the decision that shapes everything else.</p>
+    <h3>References, not images</h3>
+    <p>Books store asset ids + normalized transforms; art is hosted once and cached. A direct benefit: <strong>art can be added or swapped with zero code changes</strong>. The desert &amp; sea theme was dropped in by editing the catalog and hosting the files — no rebuild.</p>
+    <h3>Resolution-independent placement</h3>
+    <p>A dragged sticker's pixel position is meaningless across screens. The editor maps the pointer → stage-local space (<code>RectTransformUtility.ScreenPointToLocalPointInRectangle</code>) → <strong>normalized 0–1</strong>, and stores that. A book made on a phone replays pixel-perfect on a desktop.</p>
+    <h3>Async in a single-threaded runtime</h3>
+    <p>Unity's web requests are callback-based; wrapping each in a <code>TaskCompletionSource</code> gives clean <code>async/await</code> in WebGL's single thread, without coroutines or frame stalls.</p>
+    <h3>Hosting the compressed build (the hardest bug)</h3>
+    <p>Unity's gzip build (<code>.wasm.gz</code> / <code>.data.gz</code> / <code>.framework.js.gz</code>) fought Firebase Hosting: Firebase <strong>strips <code>Content-Encoding</code> from any <code>.js</code> filename</strong> and caches encodings inconsistently across its CDN, so the WebAssembly failed to load with an <em>"expected magic word"</em> error. The fix: <strong>ship the payload uncompressed and let Firebase gzip it natively</strong> over the wire — reliable and cache-consistent. This is automated in <code>firebase/deploy-hosting.sh</code>.</p>
+    <h3>Free-tier by design</h3>
+    <p>Realtime Database + Hosting on the free Spark plan; covers stored inline (no Storage), no Cloud Functions, no credit card.</p>
+  </section>
+
+  <section>
+    <h2 class="sec" id="scale"><span class="no">06</span> Performance &amp; scalability</h2>
+    <h3>Performance awareness (WebGL)</h3>
+    <ul>
+      <li><strong>On-demand loading</strong> — nothing downloads until it is actually shown.</li>
+      <li><strong>Two-tier caching</strong> — every asset downloads at most once per browser; in-flight de-dup prevents duplicate fetches.</li>
+      <li><strong>Responsive by construction</strong> — a CanvasScaler with a 1920×1080 reference scales cleanly to any screen; positions are normalized.</li>
+      <li><strong>Single-thread-friendly I/O</strong> — non-blocking <code>async/await</code> over web requests keeps the frame responsive.</li>
+    </ul>
+    <h3>Scaling to many children &amp; large libraries</h3>
+    <p>Data splits into two kinds that scale very differently: <strong>shared</strong> (the catalog + images — one copy for everyone, CDN-served, does not grow with users) and <strong>per-child</strong> (each child loads only their own <code>/books/{kidId}</code> slice, never everyone's).</p>
+    <ul>
+      <li><strong>8,000 children:</strong> the shared art is one cached/CDN copy for all; each child pulls only their small slice; recipes are tiny text.</li>
+      <li><strong>50,000 images:</strong> the cloud + CDN is the source of truth; IndexedDB holds only the recently-used subset per browser (evicted items simply re-download). A production build adds an LRU cap so it never exceeds the quota.</li>
+      <li><strong>Growth path:</strong> fetch only the child's node; paginate the shelf; add a derived <strong>search index / search service</strong> for discovery; rely on CDN + browser cache for images.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="sec" id="ai"><span class="no">07</span> Use of AI tools</h2>
+    <p>I built BookLab with <strong>Claude Code</strong> (Claude Opus 4.8, in VS Code) as a pair-programmer. It genuinely sped the work up — while I set the direction, made the decisions, and reviewed everything, so I understand every part and can extend it.</p>
+    <ul>
+      <li><strong>Planning &amp; architecture</strong> — we talked through the brief and shaped the structure together: a layered MVC + event-driven design, mirrored from a REST-in-WebGL pattern I trust.</li>
+      <li><strong>Implementation</strong> — it wrote much of the code alongside me (the data models, the REST client, save/load, the two-tier cache, the screens), which I reviewed and adjusted as we went.</li>
+      <li><strong>Debugging the hard parts</strong> — a real help on the tricky WebGL + Firebase issues: the SDK not supporting WebGL, and getting the compressed build to boot on Hosting.</li>
+      <li><strong>Ops from the CLI</strong> — Firebase project setup, seeding the database, and Hosting deploys, kept fast.</li>
+    </ul>
+    <p>The build was quicker for it — and the direction, the decisions, and the understanding are mine.</p>
+  </section>
+
+  <section>
+    <h2 class="sec" id="run"><span class="no">08</span> Tech stack, running &amp; deploying</h2>
+    <table>
+      <tr><th>Item</th><th>Detail</th></tr>
+      <tr><td>Engine</td><td>Unity <b>6000.4.3f1</b> (URP), Input System, Newtonsoft JSON</td></tr>
+      <tr><td>Backend</td><td>Firebase <b>Realtime Database</b> + <b>Hosting</b> — project <code>adeeb-booklab-07111926</code> (Spark / free)</td></tr>
+      <tr><td>Run in editor</td><td>Open the project and press <b>Play</b> (the app auto-starts via <code>Bootstrap</code>)</td></tr>
+      <tr><td>Build</td><td>Unity menu <b>BookLab → Build WebGL</b> (outputs <code>Build/WebGL</code>)</td></tr>
+      <tr><td>Deploy</td><td><code>bash firebase/deploy-hosting.sh</code> — assembles <code>public/</code>, applies the gzip workaround, deploys</td></tr>
+      <tr><td>Live</td><td><a href="https://adeeb-booklab-07111926.web.app">adeeb-booklab-07111926.web.app</a></td></tr>
+      <tr><td>Repository</td><td><a href="https://github.com/alishehroz-ideo/webgl-and-firebase-learning">github.com/alishehroz-ideo/webgl-and-firebase-learning</a></td></tr>
+    </table>
+    <div class="callout sea">
+      <span class="lbl">Deliverables</span>
+      <p>Git repository · live WebGL build · this handover document · video walkthrough. Art credit: sticker items are <a href="https://openmoji.org">OpenMoji</a> (CC BY-SA 4.0); backgrounds are generated flat illustrations.</p>
+    </div>
+  </section>
+
+  <footer>BookLab — Task 1 · Interactive Content Creation (WebGL / Firebase) · Ali Shehroz</footer>
+</div>

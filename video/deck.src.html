@@ -202,6 +202,16 @@
   .biglink{font-family:var(--mono);font-size:clamp(17px,2.3vw,25px);color:var(--sea-deep);word-break:break-all;font-weight:600}
   .foot{color:var(--faint);font-size:14px;font-family:var(--mono)}
 
+  /* spotlight walkthrough — arrow keys step through a slide's parts one at a time */
+  .slide.dim .seg{transition:opacity .3s ease,box-shadow .3s ease,background .3s ease,transform .3s ease}
+  .slide.dim .seg:not(.spot){opacity:.26}
+  .slide.dim .seg.spot{opacity:1}
+  .slide.dim .stage.spot,.slide.dim .card.spot,.slide.dim .step.spot,
+  .slide.dim .meta.spot,.slide.dim .fnode.spot,.slide.dim .recipe-card.spot{
+    box-shadow:0 0 0 2px var(--sea-deep) inset,0 16px 34px rgba(120,86,40,.16);transform:scale(1.015)}
+  .slide.dim .layer.spot{background:var(--sea-soft);border-radius:14px;box-shadow:0 0 0 1.5px var(--sea-tint) inset;padding:6px 10px;margin:-1px -10px}
+  .slide.dim li.spot{background:var(--sea-soft);border-radius:10px;box-shadow:0 0 0 1.5px var(--sea-tint) inset;padding-top:6px;padding-bottom:6px;padding-right:10px}
+
   @media (max-width:760px){
     .ladder,.cards,.metaphor{grid-template-columns:1fr}
     .layer{grid-template-columns:1fr}.layer .lab{text-align:left}
@@ -256,21 +266,21 @@
   <h2>Three screens. One simple loop.</h2>
   <p class="lead">Everything a child does is <b>make a book</b>, <b>save it</b>, then <b>read it back</b> — across just three screens.</p>
   <div class="loop">
-    <div class="stage read">
+    <div class="stage read seg">
       <div class="badge">📚</div>
       <div class="role">Screen 1 · the shelf</div>
       <div class="name">Pick a book</div>
       <p>Every saved book sits on the shelf as a cover. Or tap “Create New”.</p>
     </div>
     <div class="go">→</div>
-    <div class="stage make">
+    <div class="stage make seg">
       <div class="badge">✏️</div>
       <div class="role">Screen 2 · the editor</div>
       <div class="name">Make it</div>
       <p>Choose a background, drag stickers on, resize them, add more pages, give it a name, save.</p>
     </div>
     <div class="go">→</div>
-    <div class="stage back">
+    <div class="stage back seg">
       <div class="badge">▶</div>
       <div class="role">Screen 3 · playback</div>
       <div class="name">Read it</div>
@@ -291,7 +301,7 @@
   <p class="lead">Like a tidy company: every layer has a role and only talks to the one below it — so the app stays easy to change.</p>
 
   <div class="arch">
-    <div class="layer">
+    <div class="layer seg">
       <div class="lab">Top</div>
       <div class="row">
         <div class="lvl">
@@ -301,7 +311,7 @@
       </div>
     </div>
     <div class="conn"></div>
-    <div class="layer">
+    <div class="layer seg">
       <div class="lab">The screens</div>
       <div class="row">
         <div class="lvl cool"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span><div class="tx"><div class="plain">Main Menu</div><div class="desc">the shelf</div></div></div>
@@ -310,14 +320,14 @@
       </div>
     </div>
     <div class="conn"></div>
-    <div class="layer">
+    <div class="layer seg">
       <div class="lab">Front desk</div>
       <div class="row">
         <div class="lvl"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20v-6a6 6 0 0 1 12 0v6"/><path d="M12 6V4"/></svg></span><div class="tx"><div class="plain">The one place that saves &amp; loads</div><div class="tech">ContentApi</div><div class="desc">The whole app asks it to Save, Load or List a book — it never touches the internet directly.</div></div></div>
       </div>
     </div>
     <div class="conn"></div>
-    <div class="layer">
+    <div class="layer seg">
       <div class="lab">Engine room</div>
       <div class="row">
         <div class="lvl warm"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 3v9l6 3"/></svg></span><div class="tx"><div class="plain">Internet line</div><div class="tech">FirebaseClient</div><div class="desc">the only part that talks to the cloud</div></div></div>
@@ -326,7 +336,7 @@
       </div>
     </div>
     <div class="conn"></div>
-    <div class="layer">
+    <div class="layer seg">
       <div class="lab">Blueprint</div>
       <div class="row">
         <div class="lvl"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h9l5 5v13H5z"/><path d="M14 3v5h5"/><path d="M8 13h8M8 17h5"/></svg></span><div class="tx"><div class="plain">The blueprint of a book</div><div class="tech">BookModel · Page · PlacedObject</div><div class="desc">plain data — what a book, page and sticker are (no pictures).</div></div></div>
@@ -348,7 +358,7 @@
   <p class="lead">A saved book is tiny — it just lists <b>which sticker</b> and <b>where</b>, never the image itself. Positions are stored as percentages, so it looks right on any screen.</p>
 
   <div class="datawrap">
-    <div class="recipe-card">
+    <div class="recipe-card seg">
       <div class="recipe-thumb"><img src="__ST_CAMEL__" alt="camel sticker"><span class="dotmark"></span></div>
       <div class="trans">
         <div class="say">“Put a <b>camel</b> at <b>62% across</b> and <b>55% up</b>, at medium size.”</div>
@@ -360,13 +370,13 @@
       <div class="flowlabels"><b>◂ SAVE</b><span class="r">LOAD ▸</span></div>
       <div class="track">
         <div class="beam"><i class="save"></i><i class="load"></i></div>
-        <div class="fnode warm"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M14.5 5.5l4 4L8 20H4v-4z"/></svg></span><div class="plain">Editor</div><div class="tech">builds the recipe</div></div>
+        <div class="fnode warm seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M14.5 5.5l4 4L8 20H4v-4z"/></svg></span><div class="plain">Editor</div><div class="tech">builds the recipe</div></div>
         <div class="arrow"></div>
-        <div class="fnode"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20v-6a6 6 0 0 1 12 0v6"/></svg></span><div class="plain">Front desk</div><div class="tech">ContentApi</div></div>
+        <div class="fnode seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20v-6a6 6 0 0 1 12 0v6"/></svg></span><div class="plain">Front desk</div><div class="tech">ContentApi</div></div>
         <div class="arrow"></div>
-        <div class="fnode"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 3v9l6 3"/></svg></span><div class="plain">Internet line</div><div class="tech">FirebaseClient</div></div>
+        <div class="fnode seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 3v9l6 3"/></svg></span><div class="plain">Internet line</div><div class="tech">FirebaseClient</div></div>
         <div class="arrow"></div>
-        <div class="fnode"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="7" ry="2.6"/><path d="M5 5.5v13c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-13"/><path d="M5 12c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6"/></svg></span><div class="plain">Cloud database</div><div class="tech">/books/{kid}/{id}</div></div>
+        <div class="fnode seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="7" ry="2.6"/><path d="M5 5.5v13c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-13"/><path d="M5 12c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6"/></svg></span><div class="plain">Cloud database</div><div class="tech">/books/{kid}/{id}</div></div>
       </div>
       <button class="replay" data-target="s3">↻ replay flow</button>
     </div>
@@ -381,17 +391,17 @@
   <p class="lead">Art lives in the cloud and loads only when it's first shown. Then it's kept in two places so it <b>never downloads twice</b>.</p>
 
   <div class="ladder">
-    <div class="step s1">
+    <div class="step s1 seg">
       <div class="h"><span class="num">1</span><span class="title">Memory</span><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L4 14h7l-1 8 9-12h-7z" fill="currentColor" stroke="none"/></svg></span></div>
       <div class="tech">in-session</div>
       <p>Instant to reuse — but gone the moment the tab closes.</p>
     </div>
-    <div class="step s2">
+    <div class="step s2 seg">
       <div class="h"><span class="num">2</span><span class="title">Browser storage</span><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h.01M7 13h.01M11 9h6M11 13h6"/></svg></span></div>
       <div class="tech">IndexedDB</div>
       <p>Saved inside the browser — survives a page reload.</p>
     </div>
-    <div class="step s3">
+    <div class="step s3 seg">
       <div class="h"><span class="num">3</span><span class="title">Download</span><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11m0 0l-4-4m4 4l4-4"/><path d="M4 19h16"/></svg></span></div>
       <div class="tech">from Firebase</div>
       <p>Only if both miss: fetch it <b>once</b>, then store it in both.</p>
@@ -399,8 +409,8 @@
   </div>
 
   <div class="metaphor">
-    <div class="meta cold"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M6 10h12"/><path d="M9 6.2v1.6M9 13v2"/></svg></span><div><div class="plain">The cache = your fridge</div><div class="desc">what you're using now · small · old items get evicted</div></div></div>
-    <div class="meta big"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span><div><div class="plain">The cloud = the warehouse</div><div class="desc">has everything · always restockable</div></div></div>
+    <div class="meta cold seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M6 10h12"/><path d="M9 6.2v1.6M9 13v2"/></svg></span><div><div class="plain">The cache = your fridge</div><div class="desc">what you're using now · small · old items get evicted</div></div></div>
+    <div class="meta big seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span><div><div class="plain">The cloud = the warehouse</div><div class="desc">has everything · always restockable</div></div></div>
   </div>
   <div class="limits">
     <span class="limit"><b>Honest limits:</b> browser storage is per-browser &amp; can be cleared</span>
@@ -415,22 +425,22 @@
   <div class="eyebrow"><span class="n">05</span> The tricky parts I solved</div>
   <h2>Where the real engineering was.</h2>
   <div class="cards">
-    <div class="card">
+    <div class="card seg">
       <div class="top"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 7v5l3 2"/></svg></span><h3>Talking to Firebase the hard way</h3></div>
       <p>Firebase's usual shortcut doesn't work in the browser — so I talk to it directly over the web, and make each request <b>wait smoothly without ever freezing the screen</b>.</p>
       <div class="tech">REST · UnityWebRequest wrapped in a TaskCompletionSource → async/await</div>
     </div>
-    <div class="card sea">
+    <div class="card sea seg">
       <div class="top"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 4v16"/><circle cx="14.5" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg></span><h3>A sticker that stays put on any screen</h3></div>
       <p>A pixel position means nothing across different screens. I store each position as a <b>percentage (0–1)</b> — so a book made on a phone looks perfect on a desktop.</p>
       <div class="tech">pointer → stage-local → normalized 0–1 · RectTransformUtility</div>
     </div>
-    <div class="card">
+    <div class="card seg">
       <div class="top"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h.01M7 13h.01M11 9h6M11 13h6"/></svg></span><h3>Remembering images with no hard drive</h3></div>
       <p>The browser has no real disk. So I keep images in memory <b>and</b> the browser's own storage — and if the same image is asked for twice at once, both share one download.</p>
       <div class="tech">IndexedDB via persistentDataPath · in-flight de-duplication</div>
     </div>
-    <div class="card sea">
+    <div class="card sea seg">
       <div class="top"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l-3 3 3 3M18 9l3 3-3 3M14 5l-4 14"/></svg></span><h3>Getting it to boot online</h3></div>
       <p>The host was mangling the compressed game files, so the app wouldn't start. The fix: <b>ship the files uncompressed and let the host compress them</b> instead.</p>
       <div class="tech">Firebase strips Content-Encoding on .js → serve raw, Firebase gzips natively</div>
@@ -443,10 +453,10 @@
   <div class="eyebrow"><span class="n">06</span> How I used AI</div>
   <h2>Claude Code, as a pair-programmer.</h2>
   <ul class="clean">
-    <li><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.4L12 15.6 7.1 18l.9-5.4-4-3.9L9.5 8z"/></svg></span><b>Planning &amp; architecture</b> — we talked through the brief and shaped the structure together.</li>
-    <li><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-5 6 5 6M16 6l5 6-5 6"/></svg></span><b>Implementation</b> — it wrote a lot of the code alongside me, which I reviewed and adjusted.</li>
-    <li><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><b>Debugging the hard parts</b> — a real help on the tricky WebGL + Firebase issues.</li>
-    <li><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></span><b>Setup &amp; deploys from the command line</b> — kept the Firebase ops fast.</li>
+    <li class="seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.4L12 15.6 7.1 18l.9-5.4-4-3.9L9.5 8z"/></svg></span><b>Planning &amp; architecture</b> — we talked through the brief and shaped the structure together.</li>
+    <li class="seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-5 6 5 6M16 6l5 6-5 6"/></svg></span><b>Implementation</b> — it wrote a lot of the code alongside me, which I reviewed and adjusted.</li>
+    <li class="seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><b>Debugging the hard parts</b> — a real help on the tricky WebGL + Firebase issues.</li>
+    <li class="seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></span><b>Setup &amp; deploys from the command line</b> — kept the Firebase ops fast.</li>
   </ul>
   <p class="lead" style="font-size:16.5px">It sped the build up a lot. <b>I set the direction, made the calls, and reviewed everything</b> — so I understand every part and can extend it.</p>
 </section>
@@ -473,82 +483,86 @@
 </section>
 
 <script>
-  // Deck-style navigation with "stops": each section is one stop; a section taller
-  // than the screen gets extra stops so ↓ steps through it before flying to the next.
+  // Arrow keys walk through a slide's parts (.seg) one at a time — highlighting each
+  // (others dim) so you can explain "this part does X" — then move to the next slide.
   var sections=[].slice.call(document.querySelectorAll('.slide'));
   var dots=[].slice.call(document.querySelectorAll('.dots a'));
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var stops=[], animating=false;
+  var slideIndex=0, segIndex=-1, segs=[], animating=false;
 
-  function buildStops(){
-    var vh=window.innerHeight, out=[];
-    sections.forEach(function(s){
-      var top=Math.round(s.offsetTop), h=s.offsetHeight, bottom=Math.round(top+h-vh);
-      out.push({y:top, sec:s, top:true});
-      if(bottom-top > vh*0.4){
-        var y=top+vh*0.82;
-        while(true){
-          var sy=Math.min(bottom, Math.round(y));
-          out.push({y:sy, sec:s, top:false});
-          if(sy>=bottom) break;
-          y+=vh*0.82;
-        }
-      }
-    });
-    out.sort(function(a,b){return a.y-b.y;});
-    stops=out;
-  }
-  function setDotByY(y){
-    var idx=0, mid=y+window.innerHeight*0.4;
-    for(var i=0;i<sections.length;i++) if(sections[i].offsetTop<=mid) idx=i;
-    dots.forEach(function(d,k){d.classList.toggle('on',k===idx);});
+  function ease(p){return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;}
+  function slideTop(i){return Math.round(sections[i].getBoundingClientRect().top+window.scrollY);}
+  function setDots(){dots.forEach(function(d,k){d.classList.toggle('on',k===slideIndex);});}
+  function clampY(y){return Math.max(0,Math.min(y,document.documentElement.scrollHeight-window.innerHeight));}
+
+  function smoothTo(y,cb){
+    y=clampY(y);
+    var startY=window.scrollY, dist=y-startY;
+    if(reduce||Math.abs(dist)<2){window.scrollTo(0,y); if(cb)cb(); return;}
+    animating=true;
+    var dur=Math.min(880,Math.max(440,Math.abs(dist)*0.5)), t0=performance.now();
+    (function step(now){
+      var p=Math.min(1,(now-t0)/dur);
+      window.scrollTo(0,startY+dist*ease(p));
+      if(p<1)requestAnimationFrame(step);
+      else{animating=false; if(cb)cb();}
+    })(performance.now());
   }
   function playSection(sec){
     sec.classList.add('in');
     var a=sec.querySelector('.arch'); if(a){a.classList.remove('in');void a.offsetWidth;a.classList.add('in');}
     var f=sec.querySelector('.flow'); if(f){f.classList.remove('in');void f.offsetWidth;f.classList.add('in');}
   }
-  function easeInOut(p){return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;}
-  function nearestStop(){
-    var y=window.scrollY,best=0,bd=Infinity;
-    for(var i=0;i<stops.length;i++){var d=Math.abs(stops[i].y-y);if(d<bd){bd=d;best=i;}}
-    return best;
+  function clearSpots(sec){sec.classList.remove('dim');sec.querySelectorAll('.seg.spot').forEach(function(e){e.classList.remove('spot');});}
+
+  function enterSlide(i){
+    i=Math.max(0,Math.min(sections.length-1,i));
+    clearSpots(sections[slideIndex]);
+    slideIndex=i; segIndex=-1;
+    var sec=sections[i];
+    segs=[].slice.call(sec.querySelectorAll('.seg'));
+    clearSpots(sec); setDots();
+    smoothTo(slideTop(i),function(){playSection(sec);});
   }
-  function goStop(i){
-    i=Math.max(0,Math.min(stops.length-1,i));
-    var st=stops[i], startY=window.scrollY, dist=st.y-startY;
-    setDotByY(st.y);
-    if(reduce||Math.abs(dist)<2){window.scrollTo(0,st.y); if(st.top)playSection(st.sec); return;}
-    animating=true;
-    var dur=Math.min(950,Math.max(560,Math.abs(dist)*0.5)), t0=performance.now();
-    (function step(now){
-      var p=Math.min(1,(now-t0)/dur);
-      window.scrollTo(0,startY+dist*easeInOut(p));
-      if(p<1)requestAnimationFrame(step);
-      else{animating=false; if(st.top)playSection(st.sec);}
-    })(performance.now());
+  function spotlight(k){
+    var sec=sections[slideIndex];
+    sec.classList.add('dim');
+    segs.forEach(function(e){e.classList.toggle('spot',e===segs[k]);});
+    segIndex=k;
+    var r=segs[k].getBoundingClientRect(), absTop=r.top+window.scrollY;
+    var y=absTop-(window.innerHeight-r.height)/2;
+    var lo=slideTop(slideIndex), hi=lo+sec.offsetHeight-window.innerHeight;
+    smoothTo(Math.max(lo,Math.min(y,Math.max(lo,hi))));
   }
-  function nav(dir){ if(!animating) goStop(nearestStop()+dir); }
+  function unspot(){var sec=sections[slideIndex];clearSpots(sec);segIndex=-1;smoothTo(slideTop(slideIndex));}
+
+  function nav(dir){
+    if(animating)return;
+    if(dir>0){
+      if(segIndex<segs.length-1) spotlight(segIndex+1);
+      else if(slideIndex<sections.length-1) enterSlide(slideIndex+1);
+    }else{
+      if(segIndex>=0){ if(segIndex>0) spotlight(segIndex-1); else unspot(); }
+      else if(slideIndex>0) enterSlide(slideIndex-1);
+    }
+  }
 
   addEventListener('keydown',function(e){
     var k=e.key;
     if(k==='ArrowDown'||k==='PageDown'||k===' '||k==='ArrowRight'){e.preventDefault();nav(1);}
     else if(k==='ArrowUp'||k==='PageUp'||k==='ArrowLeft'){e.preventDefault();nav(-1);}
-    else if(k==='Home'){e.preventDefault();goStop(0);}
-    else if(k==='End'){e.preventDefault();goStop(stops.length-1);}
+    else if(k==='Home'){e.preventDefault();enterSlide(0);}
+    else if(k==='End'){e.preventDefault();enterSlide(sections.length-1);}
   });
   var wheelLock=false;
   addEventListener('wheel',function(e){
     e.preventDefault();
     if(animating||wheelLock||Math.abs(e.deltaY)<6)return;
-    wheelLock=true;setTimeout(function(){wheelLock=false;},150);
+    wheelLock=true;setTimeout(function(){wheelLock=false;},170);
     nav(e.deltaY>0?1:-1);
   },{passive:false});
 
-  dots.forEach(function(d,i){d.addEventListener('click',function(e){
-    e.preventDefault();
-    for(var s=0;s<stops.length;s++) if(stops[s].sec===sections[i] && stops[s].top){goStop(s);break;}
-  });});
+  dots.forEach(function(d,i){d.addEventListener('click',function(e){e.preventDefault();enterSlide(i);});});
   document.querySelectorAll('.replay').forEach(function(btn){
     btn.addEventListener('click',function(){
       var sec=document.getElementById(btn.dataset.target);
@@ -556,9 +570,8 @@
         .forEach(function(a){a.classList.remove('in');void a.offsetWidth;a.classList.add('in');});
     });
   });
-
-  addEventListener('resize',function(){buildStops();window.scrollTo(0,stops[nearestStop()].y);});
+  addEventListener('resize',function(){window.scrollTo(0,slideTop(slideIndex));});
   addEventListener('click',function(){try{window.focus();}catch(e){}});
   try{window.focus();}catch(e){}
-  buildStops(); setDotByY(0); playSection(sections[0]);
+  enterSlide(0);
 </script>

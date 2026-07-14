@@ -202,6 +202,16 @@
   .biglink{font-family:var(--mono);font-size:clamp(17px,2.3vw,25px);color:var(--sea-deep);word-break:break-all;font-weight:600}
   .foot{color:var(--faint);font-size:14px;font-family:var(--mono)}
 
+  /* spotlight walkthrough — arrow keys step through a slide's parts one at a time */
+  .slide.dim .seg{transition:opacity .3s ease,box-shadow .3s ease,background .3s ease,transform .3s ease}
+  .slide.dim .seg:not(.spot){opacity:.26}
+  .slide.dim .seg.spot{opacity:1}
+  .slide.dim .stage.spot,.slide.dim .card.spot,.slide.dim .step.spot,
+  .slide.dim .meta.spot,.slide.dim .fnode.spot,.slide.dim .recipe-card.spot{
+    box-shadow:0 0 0 2px var(--sea-deep) inset,0 16px 34px rgba(120,86,40,.16);transform:scale(1.015)}
+  .slide.dim .layer.spot{background:var(--sea-soft);border-radius:14px;box-shadow:0 0 0 1.5px var(--sea-tint) inset;padding:6px 10px;margin:-1px -10px}
+  .slide.dim li.spot{background:var(--sea-soft);border-radius:10px;box-shadow:0 0 0 1.5px var(--sea-tint) inset;padding-top:6px;padding-bottom:6px;padding-right:10px}
+
   @media (max-width:760px){
     .ladder,.cards,.metaphor{grid-template-columns:1fr}
     .layer{grid-template-columns:1fr}.layer .lab{text-align:left}
@@ -256,21 +266,21 @@
   <h2>Three screens. One simple loop.</h2>
   <p class="lead">Everything a child does is <b>make a book</b>, <b>save it</b>, then <b>read it back</b> — across just three screens.</p>
   <div class="loop">
-    <div class="stage read">
+    <div class="stage read seg">
       <div class="badge">📚</div>
       <div class="role">Screen 1 · the shelf</div>
       <div class="name">Pick a book</div>
       <p>Every saved book sits on the shelf as a cover. Or tap “Create New”.</p>
     </div>
     <div class="go">→</div>
-    <div class="stage make">
+    <div class="stage make seg">
       <div class="badge">✏️</div>
       <div class="role">Screen 2 · the editor</div>
       <div class="name">Make it</div>
       <p>Choose a background, drag stickers on, resize them, add more pages, give it a name, save.</p>
     </div>
     <div class="go">→</div>
-    <div class="stage back">
+    <div class="stage back seg">
       <div class="badge">▶</div>
       <div class="role">Screen 3 · playback</div>
       <div class="name">Read it</div>
@@ -291,7 +301,7 @@
   <p class="lead">Like a tidy company: every layer has a role and only talks to the one below it — so the app stays easy to change.</p>
 
   <div class="arch">
-    <div class="layer">
+    <div class="layer seg">
       <div class="lab">Top</div>
       <div class="row">
         <div class="lvl">
@@ -301,7 +311,7 @@
       </div>
     </div>
     <div class="conn"></div>
-    <div class="layer">
+    <div class="layer seg">
       <div class="lab">The screens</div>
       <div class="row">
         <div class="lvl cool"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span><div class="tx"><div class="plain">Main Menu</div><div class="desc">the shelf</div></div></div>
@@ -310,14 +320,14 @@
       </div>
     </div>
     <div class="conn"></div>
-    <div class="layer">
+    <div class="layer seg">
       <div class="lab">Front desk</div>
       <div class="row">
         <div class="lvl"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20v-6a6 6 0 0 1 12 0v6"/><path d="M12 6V4"/></svg></span><div class="tx"><div class="plain">The one place that saves &amp; loads</div><div class="tech">ContentApi</div><div class="desc">The whole app asks it to Save, Load or List a book — it never touches the internet directly.</div></div></div>
       </div>
     </div>
     <div class="conn"></div>
-    <div class="layer">
+    <div class="layer seg">
       <div class="lab">Engine room</div>
       <div class="row">
         <div class="lvl warm"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 3v9l6 3"/></svg></span><div class="tx"><div class="plain">Internet line</div><div class="tech">FirebaseClient</div><div class="desc">the only part that talks to the cloud</div></div></div>
@@ -326,7 +336,7 @@
       </div>
     </div>
     <div class="conn"></div>
-    <div class="layer">
+    <div class="layer seg">
       <div class="lab">Blueprint</div>
       <div class="row">
         <div class="lvl"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h9l5 5v13H5z"/><path d="M14 3v5h5"/><path d="M8 13h8M8 17h5"/></svg></span><div class="tx"><div class="plain">The blueprint of a book</div><div class="tech">BookModel · Page · PlacedObject</div><div class="desc">plain data — what a book, page and sticker are (no pictures).</div></div></div>
@@ -348,7 +358,7 @@
   <p class="lead">A saved book is tiny — it just lists <b>which sticker</b> and <b>where</b>, never the image itself. Positions are stored as percentages, so it looks right on any screen.</p>
 
   <div class="datawrap">
-    <div class="recipe-card">
+    <div class="recipe-card seg">
       <div class="recipe-thumb"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmoAAAJqCAMAAACsDJxNAAADAFBMVEVHcEwAAAAAAAAAAAAGAwEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAAADqhi4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAQAAAAAAAAAEAwEAAAAAAAAAAAAAAAABAQAAAAAAAAAAAAABAAADAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAgEAAAAAAAAAAAAAAAAHAwAAAAAAAADicCIAAAAAAAAAAAAAAADjcSIAAAAAAAAAAADicCLicCL0qUDjbyPmeijicCLjcCLcbSDicCDjcSLabyPhcSPtiCycThfufD7ogSvicCHjcSLicCHicCHjciIZDQTjcCJmNhHicCLibyLbjzXunDq5ZCGYVBz0qkA5IwySURtwRhlCJw70qkF4UyBlMg+aTRbzqj1GMBIrGQlGKA7ogyznhC70qkBdQRirdy3YayGZayl+PhP0qkJzxQD/ADEAcAD0qkEAAADicCIBAQAEAgHzqUAQCgPwp0AcEwcGBAEUDQUNCQMgFghZPhcLBgI7KhCseC3DiDPooT3upT/qoz5qShzIYx4ZDwVNNRTfmzvNjzaXSxdyTx6CWyLZlzovIAwIBQHKjTbRkTd6VSAoHAvUkzjCYB28gzLyqEBuTR01JA6UZyfVaSCRZSYyIg2/hTO5WxuOYyWxey9QOBWlcitDLxJUOhbdbSFXKw1jMQ5mRxvHijUmGgrWlTl0OhGBQBNdQRigbypNJgvOZh+ndSxgQxmLYCU3Jg8/LBG5gTGwVxqXaSh3Uh9KMxOpUxlAHwmKRBQ2GghHMROaayl8ViGFXCNsNRDmnz20fTAiGAl/WSK3fzAuFweIXiShUBhjRRoiEQUsHgtHIwqdbSrinTx8PRLgnDzgbyKSSBUoFAbamDrbmTrpoj7jnjwBAADmeyjulzfxnjrdmjvkdCTPkDfsjTHphi0AAABHcEwuUc4WAAABAHRSTlMAFv4NBgP9+fX8LwQaqd4KEB85AdSsfSoT8m2CJbzklYg0d2cCxutN6JqNycxjoT2RP89RWqThtFR0SV1xsbid8NhBv0NX7mbDRtqswa/cYPxydhMoh7ZFG5c2qQr8BP5S889Z3/LY2+3mkWC/e0LkwszHmaisixWa6t7erMLnv/Tca9rUof////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AIdOPGgAAIABJREFUeNrs3dtPFMkewHHBywByESHcQUQU8Yq67IqKd42uOXv+rOrMjIMgCiIBiciCEm8RA4oPqySaqGBkX7wELzHGuPFhdV825+WoZz2rO1U1zUz3dPf09/MMk+7qX3dV/eo2Zw4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnLy89afHDz2m1F1fU5P1Ruz2lc0rS3hGKBRUqKN+wrK69vXp6bYchU7Tg4j1JC/Gqz128t2lGZGzBiW1FfTIFh1uYV7yuqr/zRTIj9bUEOwYZZSKsrP1Q4uxj7O9gaabXBlKymnO+NhFRtoRQRS351gmH2WfqSPIoSOtnrMg1rVM6lNKHuBtSUGpZZTYMNKot/NKxUmEaRQmpZwLDWcvK5kMjbYViugWJFlEWrDRtspWDxD2kb7Yg0ozSbosW3kVZo2KORssXXSnbZFGlG+mJKF1/1CJYbtlkzn/LFFwt/iC+KjvU8H5nqbX99+sX9K/2vR4LyvyqngPHFklmE15GWgUftF189Hrv5PiK+deZJq7QKpReKv6w1E2KHB3q7798d/EPozNyW/WvmJsoYnyzVjxH0THW/untzRphzOST5icBBShlz5qRVqYIs9Obe5fNmY+yLx7JfylhPOaNgu6LJ3/3gpIhHtzTW+K6hTB5p48MiTidbZL8X2ExR+1yWtKEWnL4g4nZHGruZyyhsX5snHY8KPRSJmJIPG9RQ3H5WLY20OwlFmugLySvlVbUUONXnN7VnYt+0j+4rurSHWNlC9fm1fpGwG6pZucwA96lVsnB4nXikiQ+XFLGWy7p3X9qwQBIMk10WhJqYGVDE2v4NlLv/LJKt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" alt="camel sticker"><span class="dotmark"></span></div>
       <div class="trans">
         <div class="say">“Put a <b>camel</b> at <b>62% across</b> and <b>55% up</b>, at medium size.”</div>
@@ -360,13 +370,13 @@
       <div class="flowlabels"><b>◂ SAVE</b><span class="r">LOAD ▸</span></div>
       <div class="track">
         <div class="beam"><i class="save"></i><i class="load"></i></div>
-        <div class="fnode warm"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M14.5 5.5l4 4L8 20H4v-4z"/></svg></span><div class="plain">Editor</div><div class="tech">builds the recipe</div></div>
+        <div class="fnode warm seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M14.5 5.5l4 4L8 20H4v-4z"/></svg></span><div class="plain">Editor</div><div class="tech">builds the recipe</div></div>
         <div class="arrow"></div>
-        <div class="fnode"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20v-6a6 6 0 0 1 12 0v6"/></svg></span><div class="plain">Front desk</div><div class="tech">ContentApi</div></div>
+        <div class="fnode seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20v-6a6 6 0 0 1 12 0v6"/></svg></span><div class="plain">Front desk</div><div class="tech">ContentApi</div></div>
         <div class="arrow"></div>
-        <div class="fnode"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 3v9l6 3"/></svg></span><div class="plain">Internet line</div><div class="tech">FirebaseClient</div></div>
+        <div class="fnode seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 3v9l6 3"/></svg></span><div class="plain">Internet line</div><div class="tech">FirebaseClient</div></div>
         <div class="arrow"></div>
-        <div class="fnode"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="7" ry="2.6"/><path d="M5 5.5v13c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-13"/><path d="M5 12c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6"/></svg></span><div class="plain">Cloud database</div><div class="tech">/books/{kid}/{id}</div></div>
+        <div class="fnode seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="7" ry="2.6"/><path d="M5 5.5v13c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-13"/><path d="M5 12c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6"/></svg></span><div class="plain">Cloud database</div><div class="tech">/books/{kid}/{id}</div></div>
       </div>
       <button class="replay" data-target="s3">↻ replay flow</button>
     </div>
@@ -381,17 +391,17 @@
   <p class="lead">Art lives in the cloud and loads only when it's first shown. Then it's kept in two places so it <b>never downloads twice</b>.</p>
 
   <div class="ladder">
-    <div class="step s1">
+    <div class="step s1 seg">
       <div class="h"><span class="num">1</span><span class="title">Memory</span><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L4 14h7l-1 8 9-12h-7z" fill="currentColor" stroke="none"/></svg></span></div>
       <div class="tech">in-session</div>
       <p>Instant to reuse — but gone the moment the tab closes.</p>
     </div>
-    <div class="step s2">
+    <div class="step s2 seg">
       <div class="h"><span class="num">2</span><span class="title">Browser storage</span><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h.01M7 13h.01M11 9h6M11 13h6"/></svg></span></div>
       <div class="tech">IndexedDB</div>
       <p>Saved inside the browser — survives a page reload.</p>
     </div>
-    <div class="step s3">
+    <div class="step s3 seg">
       <div class="h"><span class="num">3</span><span class="title">Download</span><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11m0 0l-4-4m4 4l4-4"/><path d="M4 19h16"/></svg></span></div>
       <div class="tech">from Firebase</div>
       <p>Only if both miss: fetch it <b>once</b>, then store it in both.</p>
@@ -399,8 +409,8 @@
   </div>
 
   <div class="metaphor">
-    <div class="meta cold"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M6 10h12"/><path d="M9 6.2v1.6M9 13v2"/></svg></span><div><div class="plain">The cache = your fridge</div><div class="desc">what you're using now · small · old items get evicted</div></div></div>
-    <div class="meta big"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span><div><div class="plain">The cloud = the warehouse</div><div class="desc">has everything · always restockable</div></div></div>
+    <div class="meta cold seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M6 10h12"/><path d="M9 6.2v1.6M9 13v2"/></svg></span><div><div class="plain">The cache = your fridge</div><div class="desc">what you're using now · small · old items get evicted</div></div></div>
+    <div class="meta big seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span><div><div class="plain">The cloud = the warehouse</div><div class="desc">has everything · always restockable</div></div></div>
   </div>
   <div class="limits">
     <span class="limit"><b>Honest limits:</b> browser storage is per-browser &amp; can be cleared</span>
@@ -415,22 +425,22 @@
   <div class="eyebrow"><span class="n">05</span> The tricky parts I solved</div>
   <h2>Where the real engineering was.</h2>
   <div class="cards">
-    <div class="card">
+    <div class="card seg">
       <div class="top"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 7v5l3 2"/></svg></span><h3>Talking to Firebase the hard way</h3></div>
       <p>Firebase's usual shortcut doesn't work in the browser — so I talk to it directly over the web, and make each request <b>wait smoothly without ever freezing the screen</b>.</p>
       <div class="tech">REST · UnityWebRequest wrapped in a TaskCompletionSource → async/await</div>
     </div>
-    <div class="card sea">
+    <div class="card sea seg">
       <div class="top"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 4v16"/><circle cx="14.5" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg></span><h3>A sticker that stays put on any screen</h3></div>
       <p>A pixel position means nothing across different screens. I store each position as a <b>percentage (0–1)</b> — so a book made on a phone looks perfect on a desktop.</p>
       <div class="tech">pointer → stage-local → normalized 0–1 · RectTransformUtility</div>
     </div>
-    <div class="card">
+    <div class="card seg">
       <div class="top"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h.01M7 13h.01M11 9h6M11 13h6"/></svg></span><h3>Remembering images with no hard drive</h3></div>
       <p>The browser has no real disk. So I keep images in memory <b>and</b> the browser's own storage — and if the same image is asked for twice at once, both share one download.</p>
       <div class="tech">IndexedDB via persistentDataPath · in-flight de-duplication</div>
     </div>
-    <div class="card sea">
+    <div class="card sea seg">
       <div class="top"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l-3 3 3 3M18 9l3 3-3 3M14 5l-4 14"/></svg></span><h3>Getting it to boot online</h3></div>
       <p>The host was mangling the compressed game files, so the app wouldn't start. The fix: <b>ship the files uncompressed and let the host compress them</b> instead.</p>
       <div class="tech">Firebase strips Content-Encoding on .js → serve raw, Firebase gzips natively</div>
@@ -443,10 +453,10 @@
   <div class="eyebrow"><span class="n">06</span> How I used AI</div>
   <h2>Claude Code, as a pair-programmer.</h2>
   <ul class="clean">
-    <li><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.4L12 15.6 7.1 18l.9-5.4-4-3.9L9.5 8z"/></svg></span><b>Planning &amp; architecture</b> — we talked through the brief and shaped the structure together.</li>
-    <li><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-5 6 5 6M16 6l5 6-5 6"/></svg></span><b>Implementation</b> — it wrote a lot of the code alongside me, which I reviewed and adjusted.</li>
-    <li><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><b>Debugging the hard parts</b> — a real help on the tricky WebGL + Firebase issues.</li>
-    <li><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></span><b>Setup &amp; deploys from the command line</b> — kept the Firebase ops fast.</li>
+    <li class="seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.4L12 15.6 7.1 18l.9-5.4-4-3.9L9.5 8z"/></svg></span><b>Planning &amp; architecture</b> — we talked through the brief and shaped the structure together.</li>
+    <li class="seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-5 6 5 6M16 6l5 6-5 6"/></svg></span><b>Implementation</b> — it wrote a lot of the code alongside me, which I reviewed and adjusted.</li>
+    <li class="seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><b>Debugging the hard parts</b> — a real help on the tricky WebGL + Firebase issues.</li>
+    <li class="seg"><span class="bi"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></span><b>Setup &amp; deploys from the command line</b> — kept the Firebase ops fast.</li>
   </ul>
   <p class="lead" style="font-size:16.5px">It sped the build up a lot. <b>I set the direction, made the calls, and reviewed everything</b> — so I understand every part and can extend it.</p>
 </section>
@@ -473,82 +483,86 @@
 </section>
 
 <script>
-  // Deck-style navigation with "stops": each section is one stop; a section taller
-  // than the screen gets extra stops so ↓ steps through it before flying to the next.
+  // Arrow keys walk through a slide's parts (.seg) one at a time — highlighting each
+  // (others dim) so you can explain "this part does X" — then move to the next slide.
   var sections=[].slice.call(document.querySelectorAll('.slide'));
   var dots=[].slice.call(document.querySelectorAll('.dots a'));
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var stops=[], animating=false;
+  var slideIndex=0, segIndex=-1, segs=[], animating=false;
 
-  function buildStops(){
-    var vh=window.innerHeight, out=[];
-    sections.forEach(function(s){
-      var top=Math.round(s.offsetTop), h=s.offsetHeight, bottom=Math.round(top+h-vh);
-      out.push({y:top, sec:s, top:true});
-      if(bottom-top > vh*0.4){
-        var y=top+vh*0.82;
-        while(true){
-          var sy=Math.min(bottom, Math.round(y));
-          out.push({y:sy, sec:s, top:false});
-          if(sy>=bottom) break;
-          y+=vh*0.82;
-        }
-      }
-    });
-    out.sort(function(a,b){return a.y-b.y;});
-    stops=out;
-  }
-  function setDotByY(y){
-    var idx=0, mid=y+window.innerHeight*0.4;
-    for(var i=0;i<sections.length;i++) if(sections[i].offsetTop<=mid) idx=i;
-    dots.forEach(function(d,k){d.classList.toggle('on',k===idx);});
+  function ease(p){return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;}
+  function slideTop(i){return Math.round(sections[i].getBoundingClientRect().top+window.scrollY);}
+  function setDots(){dots.forEach(function(d,k){d.classList.toggle('on',k===slideIndex);});}
+  function clampY(y){return Math.max(0,Math.min(y,document.documentElement.scrollHeight-window.innerHeight));}
+
+  function smoothTo(y,cb){
+    y=clampY(y);
+    var startY=window.scrollY, dist=y-startY;
+    if(reduce||Math.abs(dist)<2){window.scrollTo(0,y); if(cb)cb(); return;}
+    animating=true;
+    var dur=Math.min(880,Math.max(440,Math.abs(dist)*0.5)), t0=performance.now();
+    (function step(now){
+      var p=Math.min(1,(now-t0)/dur);
+      window.scrollTo(0,startY+dist*ease(p));
+      if(p<1)requestAnimationFrame(step);
+      else{animating=false; if(cb)cb();}
+    })(performance.now());
   }
   function playSection(sec){
     sec.classList.add('in');
     var a=sec.querySelector('.arch'); if(a){a.classList.remove('in');void a.offsetWidth;a.classList.add('in');}
     var f=sec.querySelector('.flow'); if(f){f.classList.remove('in');void f.offsetWidth;f.classList.add('in');}
   }
-  function easeInOut(p){return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;}
-  function nearestStop(){
-    var y=window.scrollY,best=0,bd=Infinity;
-    for(var i=0;i<stops.length;i++){var d=Math.abs(stops[i].y-y);if(d<bd){bd=d;best=i;}}
-    return best;
+  function clearSpots(sec){sec.classList.remove('dim');sec.querySelectorAll('.seg.spot').forEach(function(e){e.classList.remove('spot');});}
+
+  function enterSlide(i){
+    i=Math.max(0,Math.min(sections.length-1,i));
+    clearSpots(sections[slideIndex]);
+    slideIndex=i; segIndex=-1;
+    var sec=sections[i];
+    segs=[].slice.call(sec.querySelectorAll('.seg'));
+    clearSpots(sec); setDots();
+    smoothTo(slideTop(i),function(){playSection(sec);});
   }
-  function goStop(i){
-    i=Math.max(0,Math.min(stops.length-1,i));
-    var st=stops[i], startY=window.scrollY, dist=st.y-startY;
-    setDotByY(st.y);
-    if(reduce||Math.abs(dist)<2){window.scrollTo(0,st.y); if(st.top)playSection(st.sec); return;}
-    animating=true;
-    var dur=Math.min(950,Math.max(560,Math.abs(dist)*0.5)), t0=performance.now();
-    (function step(now){
-      var p=Math.min(1,(now-t0)/dur);
-      window.scrollTo(0,startY+dist*easeInOut(p));
-      if(p<1)requestAnimationFrame(step);
-      else{animating=false; if(st.top)playSection(st.sec);}
-    })(performance.now());
+  function spotlight(k){
+    var sec=sections[slideIndex];
+    sec.classList.add('dim');
+    segs.forEach(function(e){e.classList.toggle('spot',e===segs[k]);});
+    segIndex=k;
+    var r=segs[k].getBoundingClientRect(), absTop=r.top+window.scrollY;
+    var y=absTop-(window.innerHeight-r.height)/2;
+    var lo=slideTop(slideIndex), hi=lo+sec.offsetHeight-window.innerHeight;
+    smoothTo(Math.max(lo,Math.min(y,Math.max(lo,hi))));
   }
-  function nav(dir){ if(!animating) goStop(nearestStop()+dir); }
+  function unspot(){var sec=sections[slideIndex];clearSpots(sec);segIndex=-1;smoothTo(slideTop(slideIndex));}
+
+  function nav(dir){
+    if(animating)return;
+    if(dir>0){
+      if(segIndex<segs.length-1) spotlight(segIndex+1);
+      else if(slideIndex<sections.length-1) enterSlide(slideIndex+1);
+    }else{
+      if(segIndex>=0){ if(segIndex>0) spotlight(segIndex-1); else unspot(); }
+      else if(slideIndex>0) enterSlide(slideIndex-1);
+    }
+  }
 
   addEventListener('keydown',function(e){
     var k=e.key;
     if(k==='ArrowDown'||k==='PageDown'||k===' '||k==='ArrowRight'){e.preventDefault();nav(1);}
     else if(k==='ArrowUp'||k==='PageUp'||k==='ArrowLeft'){e.preventDefault();nav(-1);}
-    else if(k==='Home'){e.preventDefault();goStop(0);}
-    else if(k==='End'){e.preventDefault();goStop(stops.length-1);}
+    else if(k==='Home'){e.preventDefault();enterSlide(0);}
+    else if(k==='End'){e.preventDefault();enterSlide(sections.length-1);}
   });
   var wheelLock=false;
   addEventListener('wheel',function(e){
     e.preventDefault();
     if(animating||wheelLock||Math.abs(e.deltaY)<6)return;
-    wheelLock=true;setTimeout(function(){wheelLock=false;},150);
+    wheelLock=true;setTimeout(function(){wheelLock=false;},170);
     nav(e.deltaY>0?1:-1);
   },{passive:false});
 
-  dots.forEach(function(d,i){d.addEventListener('click',function(e){
-    e.preventDefault();
-    for(var s=0;s<stops.length;s++) if(stops[s].sec===sections[i] && stops[s].top){goStop(s);break;}
-  });});
+  dots.forEach(function(d,i){d.addEventListener('click',function(e){e.preventDefault();enterSlide(i);});});
   document.querySelectorAll('.replay').forEach(function(btn){
     btn.addEventListener('click',function(){
       var sec=document.getElementById(btn.dataset.target);
@@ -556,9 +570,8 @@
         .forEach(function(a){a.classList.remove('in');void a.offsetWidth;a.classList.add('in');});
     });
   });
-
-  addEventListener('resize',function(){buildStops();window.scrollTo(0,stops[nearestStop()].y);});
+  addEventListener('resize',function(){window.scrollTo(0,slideTop(slideIndex));});
   addEventListener('click',function(){try{window.focus();}catch(e){}});
   try{window.focus();}catch(e){}
-  buildStops(); setDotByY(0); playSection(sections[0]);
+  enterSlide(0);
 </script>

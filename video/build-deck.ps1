@@ -78,6 +78,8 @@ $map = [ordered]@{
   '__IMG_PROJECT__'  = (DataShot 'project-folder.png' 'Unity project folder' 820)
   '__IMG_EDITOR__'   = (DataShot 'editor-screen.png'  'BookLab editor screen' 1100)
   '__IMG_FIREBASE__' = (DataShot 'firebase-data.png'  'Firebase - a saved book' 1100)
+  '__IMG_SHELF__'    = (DataShot 'shelf-screen.png'    'Shelf screen'  760)
+  '__IMG_PLAYBACK__' = (DataShot 'playback-screen.png' 'A book, open'  760)
 }
 foreach($k in $map.Keys){ $html = $html.Replace($k, $map[$k]) }
 [System.IO.File]::WriteAllText($out, $html, (New-Object System.Text.UTF8Encoding($false)))

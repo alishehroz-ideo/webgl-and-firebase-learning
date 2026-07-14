@@ -232,10 +232,20 @@
   .vstage.read .vb{background:var(--sea)} .vstage.make .vb{background:var(--sand)} .vstage.back .vb{background:var(--green)}
   .vstage b{font-size:16px} .vstage .d{display:block;color:var(--muted);font-size:13.5px;margin-top:1px}
   .duo{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center}
-  .slide.dim .lrow.spot,.slide.dim .vstage.spot{box-shadow:0 0 0 2px var(--sea-deep) inset,0 16px 34px rgba(120,86,40,.16);transform:scale(1.012)}
+  .screens3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .scard{background:var(--paper2);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column}
+  .scard .thumb{aspect-ratio:16/10;background:#20242e;border-bottom:1px solid var(--line)}
+  .scard .thumb img{width:100%;height:100%;object-fit:contain;display:block}
+  .scard .body{padding:12px 15px;display:flex;flex-direction:column;gap:5px}
+  .scard .hd{display:flex;align-items:center;gap:9px}
+  .scard .vb{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-size:17px;color:#fff;flex:none}
+  .scard.read .vb{background:var(--sea)} .scard.make .vb{background:var(--sand)} .scard.back .vb{background:var(--green)}
+  .scard .nm{font-weight:800;font-size:16px}
+  .scard .d{color:var(--muted);font-size:13px;line-height:1.4}
+  .slide.dim .lrow.spot,.slide.dim .vstage.spot,.slide.dim .scard.spot{box-shadow:0 0 0 2px var(--sea-deep) inset,0 16px 34px rgba(120,86,40,.16);transform:scale(1.012)}
 
   @media (max-width:760px){
-    .ladder,.cards,.metaphor,.archgrid,.ovgrid,.duo{grid-template-columns:1fr}
+    .ladder,.cards,.metaphor,.archgrid,.ovgrid,.duo,.screens3{grid-template-columns:1fr}
     .layer{grid-template-columns:1fr}.layer .lab{text-align:left}
     .recipe-card{grid-template-columns:1fr}
     .dots{display:none}
@@ -286,15 +296,20 @@
 <section id="s1" class="slide reveal">
   <div class="eyebrow"><span class="n">01</span> Overview of the implementation</div>
   <h2>Three screens. One simple loop.</h2>
-  <p class="lead">Everything a child does is <b>make a book</b>, <b>save it</b>, then <b>read it back</b> — across just three screens.</p>
   <p class="lead" style="font-size:16.5px">A <b class="sand">Unity</b> app exported to <b class="sand">WebGL</b> (runs in the browser), with all art and saved books on <b class="sea">Firebase</b> — over plain web requests (<span class="mono">REST</span>), no server of my own.</p>
-  <div class="ovgrid">
-    <div class="vstack">
-      <div class="vstage read seg"><span class="vb">📚</span><div><b>Pick a book</b><span class="d">the shelf — saved books as covers, or “Create New”</span></div></div>
-      <div class="vstage make seg"><span class="vb">✏️</span><div><b>Make it</b><span class="d">choose a background, drag &amp; scale stickers, add pages, save</span></div></div>
-      <div class="vstage back seg"><span class="vb">▶</span><div><b>Read it</b><span class="d">flip through the saved pages, exactly as made</span></div></div>
+  <div class="screens3">
+    <div class="scard read seg">
+      <div class="thumb"><img src="__IMG_SHELF__" alt="The shelf screen"></div>
+      <div class="body"><div class="hd"><span class="vb">📚</span><span class="nm">Pick a book</span></div><div class="d">the shelf — saved books as covers, or “Create New”</div></div>
     </div>
-    <div class="shot"><img src="__IMG_EDITOR__" alt="The BookLab editor screen"><span class="cap">the Editor — real screen</span></div>
+    <div class="scard make seg">
+      <div class="thumb"><img src="__IMG_EDITOR__" alt="The editor screen"></div>
+      <div class="body"><div class="hd"><span class="vb">✏️</span><span class="nm">Make it</span></div><div class="d">pick a background, drag &amp; scale stickers, add pages, save</div></div>
+    </div>
+    <div class="scard back seg">
+      <div class="thumb"><img src="__IMG_PLAYBACK__" alt="A book open in playback"></div>
+      <div class="body"><div class="hd"><span class="vb">▶</span><span class="nm">Read it</span></div><div class="d">open a saved book and flip its pages, read-only</div></div>
+    </div>
   </div>
   <div class="loopnote">
     <span class="pill">full-HD, scales to any screen</span>

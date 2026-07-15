@@ -76,7 +76,9 @@
   /* worked-example rows (parser) */
   .exlist{display:flex;flex-direction:column;gap:9px}
   .ex{display:flex;align-items:center;gap:12px;background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;box-shadow:var(--shadow-sm);flex-wrap:wrap}
-  .ex .raw{font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:4px 9px}
+  .ex .raw{font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:4px 9px;direction:ltr}
+  .ex .raw bdi,.ex .out bdi{unicode-bidi:isolate}
+  .ex .out{direction:ltr}
   .ex .arw{color:var(--faint);font-weight:700}
   .ex .out b{color:var(--ink)} .ex .out{font-size:14px;color:var(--muted)}
   .ex .flag{margin-left:auto;font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px}
@@ -218,10 +220,10 @@
 }</pre>
     </div>
     <div class="exlist">
-      <div class="ex seg"><span class="raw" dir="ltr">الكسور_amna_13/04/2025_…_كسور</span><span class="arw">→</span><span class="out"><b dir="auto">الكسور</b> · amna · 13/04/2025</span><span class="flag hi">junk after date dropped ✓</span></div>
-      <div class="ex seg"><span class="raw" dir="ltr">مصنع__09/02/2026_…</span><span class="arw">→</span><span class="out"><b dir="auto">مصنع</b> · — · 09/02/2026</span><span class="flag lo">no author — safe</span></div>
-      <div class="ex seg"><span class="raw" dir="ltr">مركز مصادر التعلم_سامح_06/04/2024_…_#مصادر_الصبيخي</span><span class="arw">→</span><span class="out"><b dir="auto">مركز مصادر التعلم</b> · سامح · 06/04/2024</span><span class="flag hi">extra _ in tail ignored ✓</span></div>
-      <div class="ex seg"><span class="raw" dir="ltr">قصة_No Name_06/01/2025_…</span><span class="arw">→</span><span class="out"><b dir="auto">قصة</b> · No Name · 06/01/2025</span><span class="flag hi">real oddity, as-is ✓</span></div>
+      <div class="ex seg"><span class="raw"><bdi>الكسور</bdi>_<bdi>amna</bdi>_<bdi>13/04/2025</bdi>_…_<bdi>كسور</bdi></span><span class="arw">→</span><span class="out"><b><bdi>الكسور</bdi></b> · <bdi>amna</bdi> · <bdi>13/04/2025</bdi></span><span class="flag hi">junk after date dropped ✓</span></div>
+      <div class="ex seg"><span class="raw"><bdi>مصنع</bdi>__<bdi>09/02/2026</bdi>_…</span><span class="arw">→</span><span class="out"><b><bdi>مصنع</bdi></b> · — · <bdi>09/02/2026</bdi></span><span class="flag lo">no author — safe</span></div>
+      <div class="ex seg"><span class="raw"><bdi>مركز مصادر التعلم</bdi>_<bdi>سامح</bdi>_<bdi>06/04/2024</bdi>_…_<bdi>#مصادر</bdi>_<bdi>الصبيخي</bdi></span><span class="arw">→</span><span class="out"><b><bdi>مركز مصادر التعلم</bdi></b> · <bdi>سامح</bdi> · <bdi>06/04/2024</bdi></span><span class="flag hi">extra _ in tail ignored ✓</span></div>
+      <div class="ex seg"><span class="raw"><bdi>قصة</bdi>_<bdi>No Name</bdi>_<bdi>06/01/2025</bdi>_…</span><span class="arw">→</span><span class="out"><b><bdi>قصة</bdi></b> · <bdi>No Name</bdi> · <bdi>06/01/2025</bdi></span><span class="flag hi">real oddity, as-is ✓</span></div>
     </div>
   </div>
 </section>

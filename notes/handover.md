@@ -12,7 +12,7 @@
 
 ---
 
-## 1. Overview
+## 1. Overview of the implementation
 
 BookLab is a browser-based storybook maker for children. A child picks a scene, drags and scales stickers across one or more pages, names and saves the book to the cloud, and it appears as a cover-card on their shelf to read back.
 
@@ -24,9 +24,13 @@ It is a **Unity WebGL** application served in the browser, with all content and 
 
 It targets **1920×1080** and scales to any screen via a CanvasScaler reference resolution.
 
-## 2. Architecture
+![The Editor — a page being made (the real screen).](../video/shots/editor-screen.png)
 
-The code follows a clear **MVC + event-driven** pattern, organised into layers where each layer has one responsibility and only depends downward.
+## 2. Explanation of the architecture
+
+The code follows a clear **MVC + event-driven** pattern, organised into layers where each layer has one responsibility and only depends downward. The layering is visible directly in the Unity project — each folder is one layer:
+
+![The Unity project — App / Features / Services / Core / Models.](../video/shots/project-folder.png)
 
 | Layer | Responsibility |
 |---|---|
@@ -40,7 +44,7 @@ The code follows a clear **MVC + event-driven** pattern, organised into layers w
 
 > **Why this matters.** MVC keeps data, view, and logic separate; the event bus keeps the screens from knowing about each other. Together they make the codebase easy to read, extend, and reason about — which is what "scalable systems" means here.
 
-## 3. Asset loading & caching
+## 3. How asset loading & caching work
 
 Backgrounds and stickers are **not baked into the build**. A catalog in Firebase lists each asset's `id`, `name`, and `url`; the picker menus are built from it, and an image is downloaded **only when it is first shown** (opening a picker, placing or viewing an item).
 
@@ -71,6 +75,8 @@ The lookup order is **memory → disk → download** (via `UnityWebRequest`), st
 // a book = title + timestamps + pages (each page = background + placed objects)
 BookModel -> PageModel[] -> PlacedObjectModel[]
 ```
+
+![A saved book in the Realtime Database — references and numbers, never image bytes.](../video/shots/firebase-data.png)
 
 **Firebase over REST (no SDK).** The Firebase Unity SDK **does not support WebGL**, so every data operation uses the **Realtime Database REST API** through `UnityWebRequest`: `GET` on `/path.json` to read, `PUT` to write. Async is achieved by wrapping the callback-based request in a `TaskCompletionSource`, giving clean `async/await` with no coroutines and no blocking the frame.
 
@@ -112,7 +118,7 @@ Books are stored under a per-child path (`/books/{kidId}/…`) — a single `dem
 - **50,000 images:** the cloud + CDN is the source of truth; IndexedDB holds only the recently-used subset per browser (evicted items simply re-download). A production build adds an LRU cap so it never exceeds the quota.
 - **Growth path:** fetch only the child's node; paginate the shelf; add a derived **search index / search service** for discovery; rely on CDN + browser cache for images.
 
-## 7. Use of AI tools
+## 7. Any use of AI tools
 
 I built BookLab with **Claude Code** (Claude Opus 4.8, in VS Code) as a pair-programmer. It genuinely sped the work up — while I set the direction, made the decisions, and reviewed everything, so I understand every part and can extend it.
 

@@ -66,6 +66,7 @@ namespace BookLab.Features.Search
             _content = (RectTransform)contentGO.transform;
             _content.SetParent(viewportRT, false);
             _content.anchorMin = new Vector2(0, 1); _content.anchorMax = new Vector2(1, 1); _content.pivot = new Vector2(0.5f, 1);
+            _content.sizeDelta = Vector2.zero; _content.anchoredPosition = Vector2.zero;   // fill viewport width EXACTLY (no left overhang)
             var vlg = contentGO.GetComponent<VerticalLayoutGroup>();
             vlg.spacing = 12; vlg.padding = new RectOffset(12, 12, 12, 12);
             vlg.childControlWidth = true; vlg.childControlHeight = true;

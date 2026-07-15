@@ -6,8 +6,8 @@
 |---|---|
 | **Author** | Ali Shehroz |
 | **For** | Adeeb · Phase 1 Technical Assessment |
-| **Live app** | https://adeeb-booklab-07111926.web.app |
-| **Repository** | https://github.com/alishehroz-ideo/webgl-and-firebase-learning |
+| **Live app** | <https://adeeb-booklab-07111926.web.app> |
+| **Repository** | <https://github.com/alishehroz-ideo/webgl-and-firebase-learning> |
 | **Stack** | Unity 6 WebGL · Firebase (Realtime Database + Hosting) · REST |
 
 ---
@@ -138,8 +138,8 @@ The build was quicker for it — and the direction, the decisions, and the under
 | Run in editor | Open the project and press **Play** (the app auto-starts via `Bootstrap`) |
 | Build | Unity menu **BookLab → Build WebGL** (outputs `Build/WebGL`) |
 | Deploy | `bash firebase/deploy-hosting.sh` — assembles `public/`, applies the gzip workaround, deploys |
-| Live | https://adeeb-booklab-07111926.web.app |
-| Repository | https://github.com/alishehroz-ideo/webgl-and-firebase-learning |
+| Live | <https://adeeb-booklab-07111926.web.app> |
+| Repository | <https://github.com/alishehroz-ideo/webgl-and-firebase-learning> |
 
 **Deliverables:** Git repository · live WebGL build · this handover document · video walkthrough.
 

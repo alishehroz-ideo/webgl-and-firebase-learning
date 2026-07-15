@@ -6,8 +6,8 @@
 |---|---|
 | **Author** | Ali Shehroz |
 | **For** | Adeeb · Phase 1 Technical Assessment — Task 2 |
-| **Live app** | https://adeeb-booklab-task2.web.app |
-| **Repository** | https://github.com/alishehroz-ideo/webgl-and-firebase-learning |
+| **Live app** | <https://adeeb-booklab-task2.web.app> |
+| **Repository** | <https://github.com/alishehroz-ideo/webgl-and-firebase-learning> |
 | **Stack** | Unity 6 WebGL · Firebase Realtime Database · REST · TextMeshPro (Amiri) |
 
 *This document is written for the reviewer. It explains what I built, the decisions behind it, and how it maps to the evaluation criteria — parsing robustness, search performance, code architecture, and scalability.*
@@ -230,8 +230,8 @@ I built this with **Claude Code** as a pair-programmer. We reasoned through the 
 | Text | **Amiri** font bundled for Arabic (WebGL has no OS fallback) |
 | Run in editor | Open the project, load the `task2` scene, press **Play** |
 | Build | per-task WebGL build; deploy via `firebase/deploy-hosting.sh` (hosting target `task2`) |
-| Live | https://adeeb-booklab-task2.web.app |
-| Repository | https://github.com/alishehroz-ideo/webgl-and-firebase-learning |
+| Live | <https://adeeb-booklab-task2.web.app> |
+| Repository | <https://github.com/alishehroz-ideo/webgl-and-firebase-learning> |
 
 **Deliverables:** Git repository · live WebGL build · this handover document · video walkthrough.
 

@@ -34,11 +34,12 @@ rm -rf "$PUBLIC_DIR/Build" "$PUBLIC_DIR/TemplateData" "$PUBLIC_DIR/index.html"
 cp -r "$BUILD_DIR/index.html" "$BUILD_DIR/Build" "$BUILD_DIR/TemplateData" "$PUBLIC_DIR/"
 
 echo "==> Decompressing Unity payload (Firebase gzips it natively) ..."
-for f in WebGL.wasm WebGL.data WebGL.framework.js; do
-  if [ -f "$PUBLIC_DIR/Build/$f.gz" ]; then
-    gzip -dc "$PUBLIC_DIR/Build/$f.gz" > "$PUBLIC_DIR/Build/$f"
-    rm "$PUBLIC_DIR/Build/$f.gz"
-  fi
+# Prefix-agnostic: Unity names the files after the build folder (WebGL.* for task1,
+# WebGL-Task2.* for task2), so just decompress every .gz that's there.
+for gz in "$PUBLIC_DIR"/Build/*.gz; do
+  [ -e "$gz" ] || continue
+  gzip -dc "$gz" > "${gz%.gz}"
+  rm "$gz"
 done
 # point index.html at the uncompressed files (strip ".gz" before each closing quote)
 sed -i 's#\.gz"#"#g' "$PUBLIC_DIR/index.html"

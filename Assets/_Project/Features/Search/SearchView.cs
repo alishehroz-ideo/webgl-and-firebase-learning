@@ -98,6 +98,7 @@ namespace BookLab.Features.Search
 
             ClearCards();
             var list = r.Results ?? new List<ParsedContent>();
+            PrewarmAtlas(list);   // build the font atlas ONCE up-front so cards don't blank on a mid-build rebuild
             foreach (var item in list) AddCard(item);
 
             if (list.Count == 0)
@@ -129,6 +130,24 @@ namespace BookLab.Features.Search
             var meta = UiFactory.Label("Meta", card, "by " + Shape(author) + date,
                                        24, new Color(1, 1, 1, 0.6f), TextAnchor.UpperLeft);
             meta.gameObject.AddComponent<LayoutElement>().preferredHeight = 30;
+        }
+
+        // Request every glyph we're about to show into the dynamic-font atlas in ONE pass, at the two
+        // card sizes, so creating the cards afterwards never triggers an atlas rebuild (which is what
+        // was blanking them).
+        void PrewarmAtlas(System.Collections.Generic.List<ParsedContent> list)
+        {
+            var sb = new System.Text.StringBuilder("by unknown author untitled 0123456789/.:· ");
+            foreach (var it in list)
+            {
+                if (!string.IsNullOrEmpty(it.Name))   sb.Append(Shape(it.Name));
+                if (!string.IsNullOrEmpty(it.Author)) sb.Append(Shape(it.Author));
+                if (!string.IsNullOrEmpty(it.Date))   sb.Append(it.Date);
+            }
+            string chars = sb.ToString();
+            var f = UiFactory.ActiveFont;
+            f.RequestCharactersInTexture(chars, 34);
+            f.RequestCharactersInTexture(chars, 24);
         }
 
         void ClearCards()

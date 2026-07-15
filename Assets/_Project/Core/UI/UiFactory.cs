@@ -22,6 +22,9 @@ namespace BookLab.Core.UI
             }
         }
 
+        // The active font — exposed so callers can pre-warm its glyph atlas before mass-creating text.
+        public static Font ActiveFont => Font;
+
         public static RectTransform Panel(string name, Transform parent, Color color)
         {
             var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));

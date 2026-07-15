@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using BookLab.Core.Events;
 using BookLab.Core.UI;
 
@@ -13,8 +14,8 @@ namespace BookLab.Features.Search
     public class SearchView : MonoBehaviour
     {
         InputField _input;
-        Text _shaped;   // overlay mirroring the typed text with Arabic shaping/RTL applied
-        Text _status;
+        TMP_Text _shaped;   // overlay mirroring the typed text with Arabic shaping/RTL applied
+        TMP_Text _status;
         RectTransform _content;
 
         static readonly Color Bg     = new Color(0.11f, 0.13f, 0.18f);
@@ -29,7 +30,7 @@ namespace BookLab.Features.Search
             var bg = UiFactory.Panel("SearchBg", parent, Bg);
             UiFactory.Stretch(bg);
 
-            var title = UiFactory.Label("Title", bg, "Search the Content Library", 40, Color.white, TextAnchor.MiddleLeft);
+            var title = UiFactory.TmpLabel("Title", bg, "Search the Content Library", 38, Color.white, TextAlignmentOptions.Left);
             Box(title.rectTransform, 60, 30, 1200, 56);
 
             _input = UiFactory.InputField("Input", bg, "Type a content name or author…", 30);
@@ -40,8 +41,7 @@ namespace BookLab.Features.Search
             // raw glyphs and lay a shaped overlay on top that mirrors them. Reads correctly at rest;
             // while actively typing, the caret follows the raw text so it can look slightly offset.
             _input.textComponent.color = new Color(0, 0, 0, 0);
-            _shaped = UiFactory.Label("Shaped", _input.transform, "", 30, new Color(0.1f, 0.1f, 0.1f), TextAnchor.MiddleLeft);
-            _shaped.horizontalOverflow = HorizontalWrapMode.Overflow;
+            _shaped = UiFactory.TmpLabel("Shaped", _input.transform, "", 30, new Color(0.1f, 0.1f, 0.1f), TextAlignmentOptions.Left);
             _shaped.rectTransform.anchorMin = Vector2.zero; _shaped.rectTransform.anchorMax = Vector2.one;
             _shaped.rectTransform.offsetMin = new Vector2(14, 0); _shaped.rectTransform.offsetMax = new Vector2(-14, 0);
             _input.onValueChanged.AddListener(s => _shaped.text = Shape(s));
@@ -50,7 +50,7 @@ namespace BookLab.Features.Search
             Box(btn.GetComponent<RectTransform>(), 1500, 100, 220, 72);
             btn.onClick.AddListener(DoSearch);
 
-            _status = UiFactory.Label("Status", bg, "", 26, new Color(1, 1, 1, 0.6f), TextAnchor.MiddleLeft);
+            _status = UiFactory.TmpLabel("Status", bg, "", 24, new Color(1, 1, 1, 0.6f), TextAlignmentOptions.Left);
             Box(_status.rectTransform, 60, 186, 1660, 40);
 
             BuildScroll(bg);
@@ -121,14 +121,14 @@ namespace BookLab.Features.Search
             cvlg.childForceExpandWidth = true;  cvlg.childForceExpandHeight = false;
             cvlg.childAlignment = TextAnchor.MiddleLeft;
 
-            var name = UiFactory.Label("Name", card, Shape(item.HasName ? item.Name : "(untitled)"),
-                                       34, Color.white, TextAnchor.LowerLeft);
+            var name = UiFactory.TmpLabel("Name", card, Shape(item.HasName ? item.Name : "(untitled)"),
+                                          32, Color.white, TextAlignmentOptions.Left);
             name.gameObject.AddComponent<LayoutElement>().preferredHeight = 44;
 
             string author = item.HasAuthor ? item.Author : "unknown author";
             string date = string.IsNullOrEmpty(item.Date) ? "" : "   ·   " + item.Date;
-            var meta = UiFactory.Label("Meta", card, "by " + Shape(author) + date,
-                                       24, new Color(1, 1, 1, 0.6f), TextAnchor.UpperLeft);
+            var meta = UiFactory.TmpLabel("Meta", card, "by " + Shape(author) + date,
+                                          22, new Color(1, 1, 1, 0.6f), TextAlignmentOptions.Left);
             meta.gameObject.AddComponent<LayoutElement>().preferredHeight = 30;
         }
 

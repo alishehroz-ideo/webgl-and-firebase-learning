@@ -8,7 +8,19 @@ namespace BookLab.Core.UI
     public static class UiFactory
     {
         static Font _font;
-        static Font Font => _font != null ? _font : (_font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"));
+        static Font Font
+        {
+            get
+            {
+                if (_font != null) return _font;
+                // WebGL has no OS font fallback, so the built-in font (Liberation Sans — no Arabic)
+                // renders Arabic blank in a build. Amiri covers Latin + Arabic presentation forms
+                // (which the reshaper outputs). Falls back to the built-in font if not present.
+                _font = Resources.Load<Font>("Fonts/Amiri-Regular");
+                if (_font == null) _font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                return _font;
+            }
+        }
 
         public static RectTransform Panel(string name, Transform parent, Color color)
         {

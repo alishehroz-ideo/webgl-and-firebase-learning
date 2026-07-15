@@ -55,3 +55,45 @@ data saved/loaded · key decisions & challenges · AI tools.
 > **[↓ Cloud database]** that writes it into Firebase's Realtime Database, under that child's own path. Loading is the same path in reverse.
 >
 > One key decision: I talk to Firebase over plain web requests — REST — because the normal Firebase toolkit doesn't run inside a browser game at all. That single choice shaped the whole data layer."
+
+## Slide 5 — Asset loading & caching  (ladder: Memory · Browser storage · Download; then fridge · warehouse)
+🎙 **SAY:**
+> "Now, loading images — the backgrounds and stickers. They all live in the cloud and load only when they're first needed, and then they're cached so they never download twice.
+>
+> **[↓ Memory]** The first place is memory — instant to reuse, but gone the moment the tab closes.
+>
+> **[↓ Browser storage]** The second is the browser's own storage — so images survive even a page reload.
+>
+> **[↓ Download]** Only if both of those miss do we download the image once from Firebase, and then save it into both places.
+>
+> **[↓ fridge]** The easy way to picture it: the cache is like your fridge — it holds what you're using right now, it's small, and old items get pushed out.
+>
+> **[↓ warehouse]** And the cloud is the warehouse — it has everything and can always restock. So if something's evicted from the fridge, we just fetch it again — nothing is ever lost.
+>
+> I'm honest about the browser's limits too: that storage is per-browser and can be cleared, there are no background threads, and very large images hit a memory ceiling — which is exactly why downloading each one only once matters so much."
+
+## Slide 6 — Key decisions & challenges  (4 cards — one spotlight step each)
+🎙 **SAY:**
+> "The interesting engineering was really in four places.
+>
+> **[↓ card 1]** First — Firebase has a ready-made toolkit, but it simply doesn't run inside a browser game. So I talk to Firebase directly over the web, and I wrapped each request so it waits smoothly in the background without ever freezing the screen.
+>
+> **[↓ card 2]** Second, placement — where a sticker sits. A pixel position is meaningless when screens are different sizes, so I store every position as a percentage of the page. That's why a book made on a phone lines up perfectly on a desktop.
+>
+> **[↓ card 3]** Third, caching with no hard drive — a browser doesn't have real file storage. So I keep images in memory and mirror them into the browser's own storage; and if the same image is asked for twice at once, both requests share a single download.
+>
+> **[↓ card 4]** And fourth — the hardest one — just getting it to start online. The host kept mangling the compressed game files, so it wouldn't boot. The fix was to ship the files uncompressed and let the host compress them itself. That one took real digging."
+
+## Slide 7 — Any use of AI tools  (4 points — one spotlight step each)
+🎙 **SAY:**
+> "On AI — I built this with Claude Code as a pair-programmer, and I'm upfront about that. It genuinely sped things up, while I set the direction and reviewed everything.
+>
+> **[↓ Planning]** We started by talking through the brief together and shaping the structure — the layered design you saw earlier.
+>
+> **[↓ Implementation]** It then wrote a lot of the code alongside me — the models, the Firebase client, save and load, the cache, the screens — which I reviewed and adjusted as we went.
+>
+> **[↓ Debugging]** It was a real help on the tricky parts — the WebGL and Firebase issues that took the most digging.
+>
+> **[↓ Setup & deploys]** And it kept the setup and deploys fast, straight from the command line.
+>
+> The result was quicker to build — but the direction, the decisions, and the understanding are mine. I can walk through and extend any part of it."

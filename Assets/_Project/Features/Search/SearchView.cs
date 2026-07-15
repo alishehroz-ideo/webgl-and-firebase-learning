@@ -56,11 +56,11 @@ namespace BookLab.Features.Search
             scrollRT.offsetMin = new Vector2(60, 40); scrollRT.offsetMax = new Vector2(-60, -236);
             scrollGO.GetComponent<Image>().color = new Color(0, 0, 0, 0.15f);
 
-            var viewportGO = new GameObject("Viewport", typeof(RectTransform), typeof(Image), typeof(Mask));
+            var viewportGO = new GameObject("Viewport", typeof(RectTransform), typeof(Image), typeof(RectMask2D));
             var viewportRT = (RectTransform)viewportGO.transform;
             viewportRT.SetParent(scrollRT, false);
             UiFactory.Stretch(viewportRT);
-            viewportGO.GetComponent<Mask>().showMaskGraphic = false;
+            viewportGO.GetComponent<Image>().color = new Color(0, 0, 0, 0);   // transparent, still raycastable
 
             var contentGO = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
             _content = (RectTransform)contentGO.transform;
@@ -98,19 +98,25 @@ namespace BookLab.Features.Search
         void AddCard(ParsedContent item)
         {
             var card = UiFactory.Panel("Card", _content, CardBg);
-            card.gameObject.AddComponent<LayoutElement>().preferredHeight = 120;
+            card.gameObject.AddComponent<LayoutElement>().preferredHeight = 118;
+
+            // Nested layout group => guaranteed left/right padding (no manual anchoring to clip).
+            var cvlg = card.gameObject.AddComponent<VerticalLayoutGroup>();
+            cvlg.padding = new RectOffset(30, 30, 16, 16);
+            cvlg.spacing = 4;
+            cvlg.childControlWidth = true;  cvlg.childControlHeight = true;
+            cvlg.childForceExpandWidth = true;  cvlg.childForceExpandHeight = false;
+            cvlg.childAlignment = TextAnchor.MiddleLeft;
 
             var name = UiFactory.Label("Name", card, Shape(item.HasName ? item.Name : "(untitled)"),
-                                       34, Color.white, TextAnchor.UpperLeft);
-            name.rectTransform.anchorMin = Vector2.zero; name.rectTransform.anchorMax = Vector2.one;
-            name.rectTransform.offsetMin = new Vector2(24, 50); name.rectTransform.offsetMax = new Vector2(-24, -12);
+                                       34, Color.white, TextAnchor.LowerLeft);
+            name.gameObject.AddComponent<LayoutElement>().preferredHeight = 44;
 
             string author = item.HasAuthor ? item.Author : "unknown author";
             string date = string.IsNullOrEmpty(item.Date) ? "" : "   ·   " + item.Date;
             var meta = UiFactory.Label("Meta", card, Shape("by " + author) + date,
-                                       24, new Color(1, 1, 1, 0.6f), TextAnchor.LowerLeft);
-            meta.rectTransform.anchorMin = Vector2.zero; meta.rectTransform.anchorMax = Vector2.one;
-            meta.rectTransform.offsetMin = new Vector2(24, 12); meta.rectTransform.offsetMax = new Vector2(-24, -58);
+                                       24, new Color(1, 1, 1, 0.6f), TextAnchor.UpperLeft);
+            meta.gameObject.AddComponent<LayoutElement>().preferredHeight = 30;
         }
 
         void ClearCards()

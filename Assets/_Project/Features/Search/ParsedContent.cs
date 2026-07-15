@@ -8,6 +8,7 @@ namespace BookLab.Features.Search
     // half-broken entry is marked rather than silently wrong.
     public class ParsedContent
     {
+        public string Id;        // the Story id in Firebase (the parent key of the CoverInfo field)
         public string Name;
         public string Author;
         public string Date;      // as found in the data, e.g. "13/04/2025"

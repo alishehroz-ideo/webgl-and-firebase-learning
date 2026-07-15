@@ -111,4 +111,4 @@ architecture · scalability).
 
 ## Slide 11 — Wrap  (recap + live link; hold)
 🎙 **SAY:**
-> "And that's Task 2 — a search feature that takes real, messy data, parses it robustly by shape, searches it instantly in memory, handles every state cleanly, and has a clear path to ten thousand items and beyond. All MVC and event-driven, reusing the Core from Task 1. It's live and playable. Thanks very much for watching."
+> "And that's Task 2 — messy data parsed robustly by shape, searched instantly in memory, with a clear path to ten thousand items and beyond. It's live and playable — thanks for watching."

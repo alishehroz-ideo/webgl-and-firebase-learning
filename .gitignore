@@ -101,5 +101,8 @@ ui-debug.log
 /public/StreamingAssets/
 /public/index.html
 
+# Task 2 hosting folder is fully generated from the WebGL build
+/public-task2/
+
 # Local art staging (the served copies live in public/assets/)
 /images/

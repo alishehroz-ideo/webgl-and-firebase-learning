@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 
 namespace BookLab.App
 {
@@ -9,10 +10,12 @@ namespace BookLab.App
     // Builds a Full-HD canvas that scales to any screen, then starts the app.
     public class Bootstrap : MonoBehaviour
     {
-        // Auto-start in any scene (including WebGL builds) without needing a hand-placed GameObject.
+        // Auto-start ONLY in the Task 1 scene ("SampleScene"). Every script compiles into EVERY
+        // build, so without this scene guard this would also fire in the Task 2 build and hijack it.
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void AutoStart()
         {
+            if (SceneManager.GetActiveScene().name != "SampleScene") return;
             if (FindFirstObjectByType<Bootstrap>() != null) return;   // a manual one is already in the scene
             new GameObject("BookLabApp").AddComponent<Bootstrap>();
         }

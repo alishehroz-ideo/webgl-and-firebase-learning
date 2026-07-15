@@ -70,7 +70,7 @@ namespace BookLab.Features.Search
             vlg.spacing = 12; vlg.padding = new RectOffset(12, 12, 12, 12);
             vlg.childControlWidth = true; vlg.childControlHeight = true;
             vlg.childForceExpandWidth = true; vlg.childForceExpandHeight = false;
-            contentGO.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.Fit.PreferredSize;
+            contentGO.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             var scroll = scrollGO.GetComponent<ScrollRect>();
             scroll.viewport = viewportRT; scroll.content = _content;

@@ -1,0 +1,407 @@
+<title>BookLab — Task 2 · Search & Content Discovery</title>
+<style>
+  :root{
+    --paper:#FBF5EC; --paper2:#ffffff; --panel:#F6EEDF; --panel2:#F1E7D5;
+    --ink:#2c2621; --muted:#7c6f61; --faint:#a99c8b;
+    --line:#ebe0cd; --line2:#ded0b8;
+    --sand:#d9832a; --sand-deep:#b3661a; --sand-tint:#fbe8cf; --sand-soft:#fdf3e4;
+    --sea:#1493ae; --sea-deep:#0d7387; --sea-tint:#daf0f3; --sea-soft:#effafb;
+    --green:#4c9a66; --green-deep:#357a4c; --green-tint:#e2f1e6;
+    --sans:"Segoe UI Variable","Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,monospace;
+    --maxw:1180px;
+    --shadow:0 22px 50px rgba(120,86,40,.14);
+    --shadow-sm:0 8px 22px rgba(120,86,40,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{scrollbar-width:none;-ms-overflow-style:none}
+  ::-webkit-scrollbar{width:0;height:0;background:transparent}
+  body{
+    margin:0;color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 620px at 88% -12%,rgba(217,131,42,.10),transparent 60%),
+      radial-gradient(1000px 640px at -8% 112%,rgba(20,147,174,.10),transparent 62%),
+      var(--paper);
+  }
+  .wordmark{position:fixed;top:22px;left:28px;z-index:50;font-weight:800;letter-spacing:-.02em;font-size:19px;color:var(--ink)}
+  .wordmark small{color:var(--faint);font-weight:600;margin-left:9px;font-size:11px;letter-spacing:.10em;text-transform:uppercase}
+  .dots{position:fixed;top:50%;right:24px;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:11px}
+  .dots a{width:9px;height:9px;border-radius:50%;background:var(--line2);transition:.3s;outline:none}
+  .dots a:hover,.dots a.on{background:var(--sand);box-shadow:0 0 0 4px var(--sand-tint)}
+
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;max-width:var(--maxw);margin:0 auto;padding:40px 48px;gap:18px}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--sea-deep);display:flex;align-items:center;gap:12px;font-weight:600}
+  .eyebrow .n{color:var(--faint)}
+  .eyebrow::before{content:"";width:30px;height:2px;border-radius:2px;background:var(--sand)}
+  h1{font-size:clamp(42px,6.4vw,78px);line-height:1.02;letter-spacing:-.03em;margin:0;font-weight:800;text-wrap:balance}
+  h2{font-size:clamp(30px,4.5vw,50px);line-height:1.05;letter-spacing:-.022em;margin:0;font-weight:800;text-wrap:balance}
+  .lead{font-size:clamp(17px,1.9vw,21px);color:var(--muted);max-width:66ch;text-wrap:pretty;margin:0}
+  .mono{font-family:var(--mono)} .sand{color:var(--sand-deep)} .sea{color:var(--sea-deep)} .green{color:var(--green-deep)}
+
+  .reveal>*{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in>*{opacity:1;transform:none}
+  .reveal.in>*:nth-child(2){transition-delay:.07s}
+  .reveal.in>*:nth-child(3){transition-delay:.14s}
+  .reveal.in>*:nth-child(4){transition-delay:.21s}
+  .ic{width:1em;height:1em;display:inline-block;vertical-align:-.14em;flex:none}
+
+  .stack{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{font-family:var(--mono);font-size:13px;padding:8px 14px;border:1px solid var(--line2);border-radius:999px;color:var(--muted);background:var(--paper2);box-shadow:var(--shadow-sm)}
+  .chip b{color:var(--ink);font-weight:700}
+
+  /* screenshot frame */
+  .shot{border-radius:14px;overflow:hidden;border:1px solid var(--line2);box-shadow:var(--shadow);position:relative;background:#20242e}
+  .shot img{display:block;width:100%;height:auto}
+  .shot .cap{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:12px;color:#fff;background:rgba(20,16,10,.55);padding:4px 10px;border-radius:8px}
+
+  /* code card — styled like an editor */
+  .codecard{background:#1b2030;border:1px solid #2b3450;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);text-align:left;min-width:0}
+  .codecard .tab{background:#141826;padding:9px 14px;font-family:var(--mono);font-size:12px;border-bottom:1px solid #2b3450;display:flex;align-items:center;gap:9px}
+  .codecard .tab .d{width:11px;height:11px;border-radius:50%;flex:none}
+  .codecard .tab .fn{color:#cdd6ea;font-weight:600;margin-left:4px}
+  .codecard pre{margin:0;padding:15px 17px;font-family:var(--mono);font-size:12.5px;line-height:1.62;color:#c7d1e6;overflow-x:auto;white-space:pre;tab-size:2}
+  .codecard .kw{color:#c792ea} .codecard .ty{color:#5fd3c4} .codecard .st{color:#ecc48d}
+  .codecard .cm{color:#6b7897;font-style:italic} .codecard .fn2{color:#82aaff}
+  .codecard.sm pre{font-size:12px;line-height:1.55}
+
+  /* two-column */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+  .duo.wide-l{grid-template-columns:1.15fr .85fr}
+  .duo.wide-r{grid-template-columns:.85fr 1.15fr}
+
+  /* worked-example rows (parser) */
+  .exlist{display:flex;flex-direction:column;gap:9px}
+  .ex{display:flex;align-items:center;gap:12px;background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;box-shadow:var(--shadow-sm);flex-wrap:wrap}
+  .ex .raw{font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:4px 9px}
+  .ex .arw{color:var(--faint);font-weight:700}
+  .ex .out b{color:var(--ink)} .ex .out{font-size:14px;color:var(--muted)}
+  .ex .flag{margin-left:auto;font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px}
+  .ex .flag.hi{background:var(--green-tint);color:var(--green-deep)}
+  .ex .flag.lo{background:var(--sand-tint);color:var(--sand-deep)}
+
+  /* architecture folder legend */
+  .archgrid{display:grid;grid-template-columns:.8fr 1.2fr;gap:24px;align-items:center}
+  .archgrid .shot{display:flex;align-items:center;justify-content:center;padding:8px}
+  .archgrid .shot img{width:auto;max-width:100%;max-height:56vh}
+  .legend{display:flex;flex-direction:column;gap:9px}
+  .lrow{display:grid;grid-template-columns:112px 1fr;gap:14px;align-items:start;background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;box-shadow:var(--shadow-sm)}
+  .lrow .fold{font-family:var(--mono);font-weight:700;color:var(--sand-deep);background:var(--sand-soft);border:1px solid var(--sand-tint);border-radius:8px;padding:5px 8px;text-align:center;font-size:12px}
+  .lrow b{font-size:14.5px} .lrow .d{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;line-height:1.4}
+
+  /* 3 states pills */
+  .states{display:flex;flex-direction:column;gap:10px}
+  .state{display:flex;gap:12px;align-items:center;background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:11px 15px;box-shadow:var(--shadow-sm)}
+  .state .k{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;padding:4px 9px;border-radius:7px;flex:none;font-weight:700}
+  .state.load .k{background:var(--sea-tint);color:var(--sea-deep)} .state.err .k{background:var(--sand-tint);color:var(--sand-deep)} .state.ok .k{background:var(--green-tint);color:var(--green-deep)}
+  .state .msg{font-size:14px;color:var(--ink)} .state .msg b{font-weight:700}
+
+  /* scale before/after */
+  .scale{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .scol{background:var(--paper2);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow-sm)}
+  .scol.bad{border-color:var(--sand-tint)} .scol.good{border-color:var(--green-tint)}
+  .scol h4{margin:0 0 8px;font-size:16px;display:flex;align-items:center;gap:9px}
+  .scol .tag{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px}
+  .scol.bad .tag{background:var(--sand-tint);color:var(--sand-deep)} .scol.good .tag{background:var(--green-tint);color:var(--green-deep)}
+  .scol p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+  .steps3{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+  .st3{display:grid;grid-template-columns:26px 1fr;gap:12px;align-items:start;font-size:14.5px;color:var(--muted)}
+  .st3 .num{font-family:var(--mono);color:#fff;background:var(--sea);width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12px}
+  .st3 b{color:var(--ink)}
+
+  /* cards (decisions) */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:var(--paper2);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:7px}
+  .card h3{margin:0;font-size:17px;letter-spacing:-.01em}
+  .card p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+  .card .tech{font-family:var(--mono);font-size:11px;color:var(--sand-deep);border-top:1px solid var(--line);padding-top:7px;margin-top:2px}
+
+  ul.clean{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+  ul.clean li{padding-left:26px;position:relative;color:var(--muted);font-size:16px;line-height:1.5}
+  ul.clean li::before{content:"›";position:absolute;left:7px;top:-1px;color:var(--sea-deep);font-weight:700}
+  ul.clean li b{color:var(--ink);font-weight:700}
+
+  .biglink{font-family:var(--mono);font-size:clamp(17px,2.3vw,25px);color:var(--sea-deep);word-break:break-all;font-weight:600}
+  .foot{color:var(--faint);font-size:14px;font-family:var(--mono)}
+
+  /* spotlight walkthrough */
+  .slide.dim .seg{transition:opacity .3s ease,box-shadow .3s ease,transform .3s ease}
+  .slide.dim .seg:not(.spot){opacity:.28}
+  .slide.dim .seg.spot{opacity:1}
+  .slide.dim .card.spot,.slide.dim .ex.spot,.slide.dim .lrow.spot,.slide.dim .state.spot,.slide.dim .scol.spot,.slide.dim .codecard.spot,.slide.dim li.spot{
+    box-shadow:0 0 0 2px var(--sea-deep) inset,0 16px 34px rgba(120,86,40,.16);transform:scale(1.012)}
+  .slide.dim li.spot{background:var(--sea-soft);border-radius:10px;padding:6px 10px}
+
+  @media (max-width:820px){.duo,.duo.wide-l,.duo.wide-r,.archgrid,.scale,.cards{grid-template-columns:1fr}.dots{display:none}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal>*{opacity:1;transform:none}}
+</style>
+
+<div class="wordmark">BookLab<small>Adeeb · Task 2</small></div>
+<nav class="dots" aria-label="Sections">
+  <a href="#s0" class="on"></a><a href="#s1"></a><a href="#s2"></a><a href="#s3"></a><a href="#s4"></a>
+  <a href="#s5"></a><a href="#s6"></a><a href="#s7"></a><a href="#s8"></a><a href="#s9"></a><a href="#s10"></a>
+</nav>
+
+<!-- 0 · COVER -->
+<section id="s0" class="slide reveal">
+  <div class="eyebrow"><span class="n">Phase 1 Technical Assessment · Task 2</span></div>
+  <h1>Search &amp; Content<br>Discovery.</h1>
+  <p class="lead">A search feature over a real, <b class="sand">messy</b> content library in Firebase — parsed robustly, searched instantly, and designed to scale. Built in Unity WebGL, MVC + event-driven.</p>
+  <div class="stack">
+    <span class="chip"><b>Firebase</b> Realtime DB</span>
+    <span class="chip"><b>Shape-based</b> parser</span>
+    <span class="chip"><b>MVC</b> + event-driven</span>
+  </div>
+</section>
+
+<!-- 1 · OVERVIEW -->
+<section id="s1" class="slide reveal">
+  <div class="eyebrow"><span class="n">01</span> Overview of the implementation</div>
+  <h2>Search a content library by <span class="sea">name or author</span>.</h2>
+  <p class="lead">Type a content name or an author, hit Search, and matching items appear as cards — Name, Author, Date. The data is remote (Firebase) and messy; the app does the tidying.</p>
+  <div class="duo wide-r">
+    <ul class="clean">
+      <li><b>Input + Search</b> — one box, searches name <i>or</i> author</li>
+      <li><b>Results as cards</b> — Name · Author · Date</li>
+      <li><b>Remote data</b> — loaded live from Firebase Realtime Database</li>
+      <li><b>Robust to mess</b> — parses inconsistent real-world strings without crashing</li>
+    </ul>
+    <div class="shot"><img src="__T2_SEARCH__" alt="The search screen"><span class="cap">the search screen — real</span></div>
+  </div>
+</section>
+
+<!-- 2 · THE CHALLENGE -->
+<section id="s2" class="slide reveal">
+  <div class="eyebrow"><span class="n">The core challenge</span> real-world messy data</div>
+  <h2>All the metadata is jammed into <span class="sand">one string</span>.</h2>
+  <p class="lead">Each item's Name, Author and Date live inside a single <span class="mono">CoverInfo</span> field — and I'm <b>not allowed to clean the data at the source</b>. I must extract it in code.</p>
+  <div class="duo">
+    <div class="shot"><img src="__T2_FIREBASE__" alt="Messy CoverInfo data in Firebase"><span class="cap">the real CoverInfo — in Firebase</span></div>
+    <ul class="clean">
+      <li><b>Mixed separators</b> — <span class="mono">_</span> and <span class="mono">|</span></li>
+      <li><b>Reordered fields</b> — date can come first</li>
+      <li><b>Missing fields</b> — no author, no date</li>
+      <li><b>Extra junk</b> — tags, type, grade appended</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 3 · PARSER -->
+<section id="s3" class="slide reveal">
+  <div class="eyebrow"><span class="n">02</span> Data parsing robustness</div>
+  <h2>Parse by <span class="sea">shape</span>, not position.</h2>
+  <p class="lead">Position parsing (<span class="mono">parts[1]</span>) crashes the moment a field is missing or reordered. Instead I anchor on the <b>date's shape</b> (dd/mm/yyyy) wherever it sits — then read outward. Nothing hardcoded.</p>
+  <div class="duo wide-l">
+    <div class="codecard seg">
+      <div class="tab"><span class="d" style="background:#e0913b"></span><span class="fn">CoverInfoParser.cs</span></div>
+<pre><span class="cm">// anchor on the DATE by its SHAPE — never by position</span>
+<span class="kw">static readonly</span> <span class="ty">Regex</span> DateRx =
+    <span class="kw">new</span> <span class="ty">Regex</span>(<span class="st">@"^\s*\d{1,2}/\d{1,2}/\d{4}\s*$"</span>);
+
+<span class="kw">public static</span> <span class="ty">ParsedContent</span> <span class="fn2">Parse</span>(<span class="kw">string</span> raw)
+{
+    <span class="kw">var</span> tokens = raw.<span class="fn2">Split</span>(<span class="st">'_'</span>);
+
+    <span class="kw">int</span> dateIdx = -1;                <span class="cm">// find date by shape</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; tokens.Length; i++)
+        <span class="kw">if</span> (DateRx.<span class="fn2">IsMatch</span>(tokens[i])) { dateIdx = i; <span class="kw">break</span>; }
+
+    <span class="kw">if</span> (dateIdx &gt;= 2) {               <span class="cm">// [name…][author][date]</span>
+        r.Author = <span class="fn2">Clean</span>(tokens[dateIdx - 1]);
+        r.Name   = <span class="fn2">Clean</span>(<span class="ty">string</span>.<span class="fn2">Join</span>(<span class="st">"_"</span>, tokens, 0, dateIdx - 1));
+    }
+    <span class="cm">// fewer fields / no date → fallback, low-confidence, no crash</span>
+    <span class="kw">return</span> r;
+}</pre>
+    </div>
+    <div class="exlist">
+      <div class="ex seg"><span class="raw">1963_Maurice Sendak_Where…</span><span class="arw">→</span><span class="out"><b>Where…</b> · Sendak · 1963</span><span class="flag hi">date first ✓</span></div>
+      <div class="ex seg"><span class="raw">Goodnight Moon | … | 1947</span><span class="arw">→</span><span class="out"><b>Goodnight Moon</b> · … · 1947</span><span class="flag hi">mixed sep ✓</span></div>
+      <div class="ex seg"><span class="raw">The Snowy Day_Ezra Keats</span><span class="arw">→</span><span class="out"><b>The Snowy Day</b> · Keats · —</span><span class="flag lo">no date</span></div>
+      <div class="ex seg"><span class="raw">Corduroy</span><span class="arw">→</span><span class="out"><b>Corduroy</b> · — · —</span><span class="flag lo">no crash ✓</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · DATA LOADING + ERROR STATES -->
+<section id="s4" class="slide reveal">
+  <div class="eyebrow"><span class="n">03</span> Data loading, caching &amp; error states</div>
+  <h2>Load once from Firebase, <span class="sea">handle every state</span>.</h2>
+  <p class="lead">One request pulls the whole library; it's parsed once and kept in memory (search is then instant — no re-fetch). Loading and failure are first-class states. <span class="mono">(read-only — this feature saves nothing.)</span></p>
+  <div class="duo wide-l">
+    <div class="codecard seg">
+      <div class="tab"><span class="d" style="background:#1493ae"></span><span class="fn">SearchService.cs — Firebase integration</span></div>
+<pre><span class="kw">public async</span> <span class="ty">Task</span>&lt;<span class="kw">bool</span>&gt; <span class="fn2">LoadAsync</span>()
+{
+    <span class="kw">string</span> json = <span class="kw">await</span> <span class="ty">FirebaseClient</span>.<span class="fn2">GetJson</span>(<span class="ty">FirebaseEndpoints</span>.<span class="fn2">StoryLibrary</span>());
+    <span class="kw">if</span> (<span class="ty">string</span>.<span class="fn2">IsNullOrEmpty</span>(json) || json == <span class="st">"null"</span>)
+        <span class="kw">return false</span>;            <span class="cm">// unreachable / empty → error</span>
+    <span class="kw">try</span> {
+        <span class="kw">var</span> root = <span class="ty">JObject</span>.<span class="fn2">Parse</span>(json);
+        <span class="kw">foreach</span> (<span class="kw">var</span> s <span class="kw">in</span> root.<span class="fn2">Properties</span>())
+            _all.<span class="fn2">Add</span>(<span class="ty">CoverInfoParser</span>.<span class="fn2">Parse</span>(<span class="fn2">FindCoverInfo</span>(s)));
+        <span class="kw">return true</span>;
+    }
+    <span class="kw">catch</span> (<span class="ty">Exception</span> e) {       <span class="cm">// malformed → error, never a crash</span>
+        <span class="ty">Debug</span>.<span class="fn2">LogError</span>(e.Message);
+        <span class="kw">return false</span>;
+    }
+}</pre>
+    </div>
+    <div class="states">
+      <div class="state load seg"><span class="k">Loading</span><span class="msg">“<b>Loading…</b>” while the library is fetched</span></div>
+      <div class="state err seg"><span class="k">Error</span><span class="msg">“<b>Couldn't load the library — try again.</b>”</span></div>
+      <div class="state ok seg"><span class="k">Ready</span><span class="msg">results shown as cards · search is instant</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · ARCHITECTURE -->
+<section id="s5" class="slide reveal">
+  <div class="eyebrow"><span class="n">04</span> Explanation of the architecture</div>
+  <h2><span class="sand">MVC</span> + <span class="sea">event-driven</span> — reusing Task 1's Core.</h2>
+  <p class="lead">Model, View and Controller are separate, and they never call each other — they talk through two events on the shared EventBus.</p>
+  <div class="archgrid">
+    <div class="shot"><img src="__T2_FOLDER__" alt="Features/Search folder"><span class="cap">Features / Search</span></div>
+    <div class="legend">
+      <div class="lrow seg"><span class="fold">Model</span><div><b>SearchService · CoverInfoParser</b><span class="d">loads from Firebase, parses, holds &amp; searches the clean list</span></div></div>
+      <div class="lrow seg"><span class="fold">View</span><div><b>SearchView</b><span class="d">the box, button &amp; result cards — renders whatever arrives</span></div></div>
+      <div class="lrow seg"><span class="fold">Controller</span><div><b>SearchController</b><span class="d">turns a search event into results via the service</span></div></div>
+      <div class="lrow seg"><span class="fold">Events</span><div><b>SearchRequested → SearchResults</b><span class="d">the only wiring between View &amp; Controller</span></div></div>
+    </div>
+  </div>
+  <div class="codecard sm seg">
+    <div class="tab"><span class="d" style="background:#4c9a66"></span><span class="fn">SearchEvents.cs</span></div>
+<pre><span class="cm">// View → Controller</span>          <span class="cm">// Controller → View</span>
+<span class="kw">class</span> <span class="ty">SearchRequested</span> { <span class="kw">string</span> Query; }   <span class="kw">class</span> <span class="ty">SearchResults</span> { <span class="ty">List</span>&lt;<span class="ty">ParsedContent</span>&gt; Results; <span class="kw">bool</span> Loading, Error; }</pre>
+  </div>
+</section>
+
+<!-- 6 · SEARCH PERFORMANCE -->
+<section id="s6" class="slide reveal">
+  <div class="eyebrow"><span class="n">05</span> Search performance</div>
+  <h2>Parse <span class="sand">once</span> → every search is instant.</h2>
+  <p class="lead">The messy strings are parsed a single time when the library loads. After that, each keystroke-search is a plain in-memory scan of the clean list — no network trip, no re-parsing. Fast and smooth for the stated 1,000+ items.</p>
+  <div class="codecard seg">
+    <div class="tab"><span class="d" style="background:#e0913b"></span><span class="fn">SearchService.cs — Search()</span></div>
+<pre><span class="cm">// parse happened ONCE at load; this just scans the clean in-memory list</span>
+<span class="kw">public</span> <span class="ty">List</span>&lt;<span class="ty">ParsedContent</span>&gt; <span class="fn2">Search</span>(<span class="kw">string</span> query)
+{
+    <span class="kw">string</span> q = query.<span class="fn2">Trim</span>().<span class="fn2">ToLowerInvariant</span>();
+    <span class="kw">foreach</span> (<span class="kw">var</span> item <span class="kw">in</span> _all) {
+        <span class="kw">bool</span> nameHit   = item.Name   != <span class="kw">null</span> &amp;&amp; item.Name.<span class="fn2">ToLowerInvariant</span>().<span class="fn2">Contains</span>(q);
+        <span class="kw">bool</span> authorHit = item.Author != <span class="kw">null</span> &amp;&amp; item.Author.<span class="fn2">ToLowerInvariant</span>().<span class="fn2">Contains</span>(q);
+        <span class="kw">if</span> (nameHit || authorHit) results.<span class="fn2">Add</span>(item);   <span class="cm">// name OR author</span>
+    }
+    <span class="kw">return</span> results;
+}</pre>
+  </div>
+</section>
+
+<!-- 7 · SCALABILITY -->
+<section id="s7" class="slide reveal">
+  <div class="eyebrow"><span class="n">Required answer</span> scalability thinking</div>
+  <h2>Scaling to <span class="sea">10,000+</span> items.</h2>
+  <p class="lead">The demo downloads &amp; parses everything in the browser — fine at 1,000, but at 10,000+ that's a big download and CPU jank on every visit. The redesign moves the heavy work off the browser.</p>
+  <div class="scale">
+    <div class="scol bad seg"><h4><span class="tag">✗ simple</span> every visit</h4><p>Each browser downloads <b>all</b> items and parses <b>all</b> of them on the single WebGL thread — slow, heavy, repeated.</p></div>
+    <div class="scol good seg"><h4><span class="tag">✓ redesign</span> once, on the server</h4><p>The browser downloads <b>only the matches</b> (e.g. 20). Parsing never happens in the browser again.</p></div>
+  </div>
+  <div class="steps3">
+    <div class="st3 seg"><span class="num">1</span><div><b>Precompute a clean index</b> — a <b>Firebase Cloud Function</b> parses the messy data once (and re-runs only on changes) into a separate <span class="mono">/searchIndex</span> node. Raw data stays untouched.</div></div>
+    <div class="st3 seg"><span class="num">2</span><div><b>Server-side, indexed queries</b> — with an <span class="mono">.indexOn</span> field, the browser asks <span class="mono">orderBy=author&amp;startAt=…&amp;limitToFirst=20</span>; Firebase <b>jumps</b> to the matches — no full scan.</div></div>
+    <div class="st3 seg"><span class="num">3</span><div><b>Or a search service</b> (Algolia / Typesense) for instant, typo-tolerant, multi-field search at any scale.</div></div>
+  </div>
+</section>
+
+<!-- 8 · KEY DECISIONS -->
+<section id="s8" class="slide reveal">
+  <div class="eyebrow"><span class="n">06</span> Key decisions &amp; challenges</div>
+  <h2>The calls that shaped it.</h2>
+  <div class="cards">
+    <div class="card seg"><h3>Parse in memory, never at the source</h3><p>The rule forbids cleaning Firebase. So the app builds a clean copy in its own memory on load — the source stays messy, untouched.</p><div class="tech">rule: "don't modify the data at the source"</div></div>
+    <div class="card seg"><h3>Shape, not position</h3><p>Anchoring on the date's shape survives reordering, mixed separators and missing fields — where <span class="mono">parts[1]</span> would crash.</p><div class="tech">CoverInfoParser · Regex date anchor · no hardcoding</div></div>
+    <div class="card seg"><h3>Real Arabic in WebGL</h3><p>The data is Arabic. WebGL has no OS font fallback, so I bundled the Amiri font and render with TextMeshPro, plus letter-shaping + RTL.</p><div class="tech">TextMeshPro + Amiri · ArabicSupport.Fix()</div></div>
+    <div class="card seg"><h3>Loading &amp; error as real states</h3><p>Empty, unreachable, or malformed data all resolve to a clear on-screen message — never a blank screen or a crash.</p><div class="tech">try/catch → bool → Loading / Error events</div></div>
+  </div>
+</section>
+
+<!-- 9 · AI TOOLS -->
+<section id="s9" class="slide reveal">
+  <div class="eyebrow"><span class="n">07</span> Any use of AI tools</div>
+  <h2>Claude Code, as a pair-programmer.</h2>
+  <ul class="clean">
+    <li class="seg"><b>Designing the parser</b> — we reasoned through the messy-data edge cases together and landed on the shape-anchored approach.</li>
+    <li class="seg"><b>Implementation</b> — it wrote much of the Search feature alongside me, which I reviewed and adjusted.</li>
+    <li class="seg"><b>The hard bug</b> — Arabic blanking in WebGL (font atlas rebuild) — a real help to diagnose and fix.</li>
+    <li class="seg"><b>Where AI belongs at scale</b> — offline, to build the clean index — not in the live search path.</li>
+  </ul>
+  <p class="lead" style="font-size:16px">It sped the build up — the direction, decisions, and understanding are mine.</p>
+</section>
+
+<!-- 10 · WRAP -->
+<section id="s10" class="slide reveal">
+  <div class="eyebrow"><span class="n">Live</span> Task 2</div>
+  <h2>Robust, instant, and built to scale.</h2>
+  <p class="lead">A messy-data search feature that parses by shape, searches in memory, handles every state, and has a clear path to 10,000+ — all MVC + event-driven, reusing Task 1's Core.</p>
+  <div class="stack">
+    <span class="chip"><b>Shape-based</b> parser</span>
+    <span class="chip"><b>In-memory</b> instant search</span>
+    <span class="chip"><b>Cloud Function</b> index at scale</span>
+    <span class="chip"><b>MVC</b> + event-driven</span>
+  </div>
+  <div class="foot">BookLab — Task 2 · Search &amp; Content Discovery</div>
+</section>
+
+<script>
+  var sections=[].slice.call(document.querySelectorAll('.slide'));
+  var dots=[].slice.call(document.querySelectorAll('.dots a'));
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var slideIndex=0, segIndex=-1, segs=[], animating=false;
+  function ease(p){return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;}
+  function slideTop(i){return Math.round(sections[i].getBoundingClientRect().top+window.scrollY);}
+  function setDots(){dots.forEach(function(d,k){d.classList.toggle('on',k===slideIndex);});}
+  function smoothTo(y,cb){
+    y=Math.max(0,Math.min(y,document.documentElement.scrollHeight-window.innerHeight));
+    var s=window.scrollY,dist=y-s;
+    if(reduce||Math.abs(dist)<2){window.scrollTo(0,y);if(cb)cb();return;}
+    animating=true;var dur=Math.min(880,Math.max(440,Math.abs(dist)*0.5)),t0=performance.now();
+    (function step(now){var p=Math.min(1,(now-t0)/dur);window.scrollTo(0,s+dist*ease(p));
+      if(p<1)requestAnimationFrame(step);else{animating=false;if(cb)cb();}})(performance.now());
+  }
+  function playSection(sec){sec.classList.add('in');}
+  function clearSpots(sec){sec.classList.remove('dim');sec.querySelectorAll('.seg.spot').forEach(function(e){e.classList.remove('spot');});}
+  function enterSlide(i){
+    i=Math.max(0,Math.min(sections.length-1,i));
+    clearSpots(sections[slideIndex]);slideIndex=i;segIndex=-1;
+    var sec=sections[i];segs=[].slice.call(sec.querySelectorAll('.seg'));
+    clearSpots(sec);setDots();smoothTo(slideTop(i),function(){playSection(sec);});
+  }
+  function spotlight(k){
+    var sec=sections[slideIndex];sec.classList.add('dim');
+    segs.forEach(function(e){e.classList.toggle('spot',e===segs[k]);});segIndex=k;
+    var r=segs[k].getBoundingClientRect(),absTop=r.top+window.scrollY;
+    var y=absTop-(window.innerHeight-r.height)/2;
+    var lo=slideTop(slideIndex),hi=lo+sec.offsetHeight-window.innerHeight;
+    smoothTo(Math.max(lo,Math.min(y,Math.max(lo,hi))));
+  }
+  function unspot(){var sec=sections[slideIndex];clearSpots(sec);segIndex=-1;smoothTo(slideTop(slideIndex));}
+  function nav(dir){
+    if(animating)return;
+    if(dir>0){ if(segIndex<segs.length-1)spotlight(segIndex+1); else if(slideIndex<sections.length-1)enterSlide(slideIndex+1); }
+    else{ if(segIndex>=0){ if(segIndex>0)spotlight(segIndex-1); else unspot(); } else if(slideIndex>0)enterSlide(slideIndex-1); }
+  }
+  addEventListener('keydown',function(e){var k=e.key;
+    if(k==='ArrowDown'||k==='PageDown'||k===' '||k==='ArrowRight'){e.preventDefault();nav(1);}
+    else if(k==='ArrowUp'||k==='PageUp'||k==='ArrowLeft'){e.preventDefault();nav(-1);}
+    else if(k==='Home'){e.preventDefault();enterSlide(0);} else if(k==='End'){e.preventDefault();enterSlide(sections.length-1);}
+  });
+  var wl=false;
+  addEventListener('wheel',function(e){e.preventDefault();
+    if(animating||wl||Math.abs(e.deltaY)<6)return;wl=true;setTimeout(function(){wl=false;},170);
+    nav(e.deltaY>0?1:-1);},{passive:false});
+  dots.forEach(function(d,i){d.addEventListener('click',function(e){e.preventDefault();enterSlide(i);});});
+  addEventListener('resize',function(){window.scrollTo(0,slideTop(slideIndex));});
+  addEventListener('click',function(){try{window.focus();}catch(e){}});
+  try{window.focus();}catch(e){}
+  enterSlide(0);
+</script>

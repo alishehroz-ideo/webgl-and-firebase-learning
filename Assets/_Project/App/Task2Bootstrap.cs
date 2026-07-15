@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using BookLab.Features.Search;
+using BookLab.Core.UI;
 
 namespace BookLab.App
 {
@@ -45,6 +46,7 @@ namespace BookLab.App
             var view = canvasGO.AddComponent<SearchView>();
             view.Build(canvasGO.transform);           // View: box + button + result cards
             canvasGO.AddComponent<SearchController>(); // Controller: loads data, answers searches
+            canvasGO.AddComponent<FontRebuildFix>();   // keep dynamic-font text from blanking on atlas rebuild
         }
     }
 }

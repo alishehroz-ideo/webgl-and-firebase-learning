@@ -17,5 +17,7 @@ namespace BookLab.Features.Search
     {
         public string Query;
         public List<ParsedContent> Results;
+        public bool Loading;   // true while the library is being fetched
+        public bool Error;     // true if the load failed
     }
 }

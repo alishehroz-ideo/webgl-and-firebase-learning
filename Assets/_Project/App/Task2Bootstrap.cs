@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
-using BookLab.Core.UI;
+using BookLab.Features.Search;
 
 namespace BookLab.App
 {
@@ -41,21 +41,10 @@ namespace BookLab.App
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 0.5f;
 
-            // --- Placeholder screen (replaced by the real Search screen next) ---
-            var bg = UiFactory.Panel("Background", canvasGO.transform, new Color(0.11f, 0.13f, 0.18f));
-            UiFactory.Stretch(bg);
-
-            var title = UiFactory.Label("Title", bg, "Task 2 · Search & Content Discovery",
-                                        64, Color.white, TextAnchor.MiddleCenter);
-            title.rectTransform.anchorMin = title.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-            title.rectTransform.sizeDelta = new Vector2(1500, 120);
-            title.rectTransform.anchoredPosition = new Vector2(0, 40);
-
-            var sub = UiFactory.Label("Subtitle", bg, "skeleton ready — parser & search coming next",
-                                      30, new Color(1, 1, 1, 0.6f), TextAnchor.MiddleCenter);
-            sub.rectTransform.anchorMin = sub.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-            sub.rectTransform.sizeDelta = new Vector2(1500, 60);
-            sub.rectTransform.anchoredPosition = new Vector2(0, -60);
+            // --- Task 2 Search screen (MVC + event-driven, reusing the Core) ---
+            var view = canvasGO.AddComponent<SearchView>();
+            view.Build(canvasGO.transform);           // View: box + button + result cards
+            canvasGO.AddComponent<SearchController>(); // Controller: loads data, answers searches
         }
     }
 }

@@ -1,8 +1,19 @@
-# Previous Work — Selected Projects
+# Selected Work — A Snapshot
 
-**Ali Shehroz** · supplementary to the Adeeb Phase 1 Technical Assessment
+**Ali Shehroz** · Unity Developer
+*Supplementary to the Adeeb Phase 1 Technical Assessment*
 
-*A few relevant Unity projects that show my experience across the areas this assessment touches — WebGL + REST and the full Firebase platform — and beyond, into VR, hardware, and machine learning.*
+These are **a few representative projects** — a sample to show the range I work across, **not a complete list**. Each is real, shipped or demoed work, with a live link or a narrated video walkthrough.
+
+**Core skills shown here:** Unity · C# · WebGL builds &amp; templates · REST API integration (Newtonsoft JSON) · the full Firebase platform (Authentication · Realtime Database · Analytics · Cloud Functions) · VR interaction systems · Virtuix Omni hardware integration · Unity ML-Agents.
+
+| Project | What it demonstrates | How to see it |
+|---|---|---|
+| **GameBull** | WebGL + REST at production scale | screenshots (below) · live on request |
+| **EmberBound** | Full Firebase suite on mobile, incl. Cloud Functions | narrated video |
+| **VR Simulation** | VR + Virtuix Omni hardware + ML-Agents AI | video |
+
+*Below: one page per project. This is a curated selection — happy to share more on request.*
 
 ---
 

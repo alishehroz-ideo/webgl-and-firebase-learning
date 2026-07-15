@@ -115,7 +115,7 @@ namespace BookLab.Features.Search
 
             string author = item.HasAuthor ? item.Author : "unknown author";
             string date = string.IsNullOrEmpty(item.Date) ? "" : "   ·   " + item.Date;
-            var meta = UiFactory.Label("Meta", card, Shape("by " + author) + date,
+            var meta = UiFactory.Label("Meta", card, "by " + Shape(author) + date,
                                        24, new Color(1, 1, 1, 0.6f), TextAnchor.UpperLeft);
             meta.gameObject.AddComponent<LayoutElement>().preferredHeight = 30;
         }
@@ -129,8 +129,8 @@ namespace BookLab.Features.Search
 
         void SetStatus(string s) { if (_status != null) _status.text = s; }
 
-        // Arabic shaping/RTL hook — returns input unchanged for now; the reshaper lands here next.
-        static string Shape(string s) => s;
+        // Arabic shaping/RTL for display (joins letters + flips to right-to-left). Latin passes through.
+        static string Shape(string s) => ArabicSupport.Fix(s);
 
         // Absolute top-left placement (canvas is 1920x1080 and scales); y grows downward.
         static void Box(RectTransform rt, float x, float y, float w, float h)

@@ -13,6 +13,7 @@ namespace BookLab.Features.Search
     public class SearchView : MonoBehaviour
     {
         InputField _input;
+        Text _shaped;   // overlay mirroring the typed text with Arabic shaping/RTL applied
         Text _status;
         RectTransform _content;
 
@@ -34,6 +35,16 @@ namespace BookLab.Features.Search
             _input = UiFactory.InputField("Input", bg, "Type a content name or author…", 30);
             Box(_input.GetComponent<RectTransform>(), 60, 100, 1420, 72);
             _input.onEndEdit.AddListener(_ => DoSearch());   // Enter (or focus-out) also searches
+
+            // The raw editable text can't be Arabic-shaped live (that's the query itself), so hide the
+            // raw glyphs and lay a shaped overlay on top that mirrors them. Reads correctly at rest;
+            // while actively typing, the caret follows the raw text so it can look slightly offset.
+            _input.textComponent.color = new Color(0, 0, 0, 0);
+            _shaped = UiFactory.Label("Shaped", _input.transform, "", 30, new Color(0.1f, 0.1f, 0.1f), TextAnchor.MiddleLeft);
+            _shaped.horizontalOverflow = HorizontalWrapMode.Overflow;
+            _shaped.rectTransform.anchorMin = Vector2.zero; _shaped.rectTransform.anchorMax = Vector2.one;
+            _shaped.rectTransform.offsetMin = new Vector2(14, 0); _shaped.rectTransform.offsetMax = new Vector2(-14, 0);
+            _input.onValueChanged.AddListener(s => _shaped.text = Shape(s));
 
             var btn = UiFactory.Button("SearchBtn", bg, "Search", Accent, 30);
             Box(btn.GetComponent<RectTransform>(), 1500, 100, 220, 72);

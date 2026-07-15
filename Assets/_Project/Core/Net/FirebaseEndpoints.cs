@@ -14,5 +14,8 @@ namespace BookLab.Core.Net
         // --- Books (per kid: /books/{kidId}/{bookId}) ---
         public static string Books(string kidId)               => $"{BaseUrl}/books/{kidId}.json";
         public static string Book(string kidId, string bookId) => $"{BaseUrl}/books/{kidId}/{bookId}.json";
+
+        // --- Task 2: content library for Search (node spelled "StoryLibary" — use as-is) ---
+        public static string StoryLibrary() => $"{BaseUrl}/StoryLibary.json";
     }
 }

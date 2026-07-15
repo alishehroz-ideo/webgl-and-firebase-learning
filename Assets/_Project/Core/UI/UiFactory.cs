@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace BookLab.Core.UI
 {
@@ -8,7 +9,46 @@ namespace BookLab.Core.UI
     public static class UiFactory
     {
         static Font _font;
-        static Font Font => _font != null ? _font : (_font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"));
+        static Font Font
+        {
+            get
+            {
+                if (_font != null) return _font;
+                // WebGL has no OS font fallback, so the built-in font (Liberation Sans — no Arabic)
+                // renders Arabic blank in a build. Amiri covers Latin + Arabic presentation forms
+                // (which the reshaper outputs). Falls back to the built-in font if not present.
+                _font = Resources.Load<Font>("Fonts/Amiri-Regular");
+                if (_font == null) _font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                return _font;
+            }
+        }
+
+        // The active font — exposed so callers can pre-warm its glyph atlas before mass-creating text.
+        public static Font ActiveFont => Font;
+
+        // --- TextMeshPro: robust dynamic-font rendering. Legacy UI Text blanks Arabic when its font
+        // atlas rebuilds; TMP manages its atlas properly, so this is what the cards/labels use. The
+        // TMP font asset is built at runtime from the bundled Amiri (which has full Arabic coverage). ---
+        static TMP_FontAsset _tmpFont;
+        public static TMP_FontAsset TmpFont
+            => _tmpFont != null ? _tmpFont : (_tmpFont = TMP_FontAsset.CreateFontAsset(Font));
+
+        public static TextMeshProUGUI TmpLabel(string name, Transform parent, string text, float size, Color color,
+                                               TextAlignmentOptions align = TextAlignmentOptions.Left)
+        {
+            var go = new GameObject(name, typeof(RectTransform));
+            var rt = (RectTransform)go.transform;
+            rt.SetParent(parent, false);
+            var t = go.AddComponent<TextMeshProUGUI>();
+            t.font = TmpFont;
+            t.text = text;
+            t.fontSize = size;
+            t.color = color;
+            t.alignment = align;
+            t.richText = false;
+            t.raycastTarget = false;
+            return t;
+        }
 
         public static RectTransform Panel(string name, Transform parent, Color color)
         {

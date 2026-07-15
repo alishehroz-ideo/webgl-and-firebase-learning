@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "adeeb-booklab-07111926"
-  }
+  },
+  "targets": {
+    "adeeb-booklab-07111926": {
+      "hosting": {
+        "task1": [
+          "adeeb-booklab-07111926"
+        ],
+        "task2": [
+          "adeeb-booklab-task2"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

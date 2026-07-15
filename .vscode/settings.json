@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "webgl-and-firebase-learning.slnx",
+    "dotnet.defaultSolution": "webgl and firebase learning.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }

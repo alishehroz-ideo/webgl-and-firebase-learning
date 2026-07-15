@@ -90,10 +90,10 @@ namespace BookLab.Features.Search
             foreach (var item in list) AddCard(item);
 
             if (list.Count == 0)
-                SetStatus($"No results for “{r.Query}”");
+                SetStatus($"No results for “{Shape(r.Query)}”");
             else
                 SetStatus($"{list.Count} result{(list.Count == 1 ? "" : "s")}" +
-                          (string.IsNullOrEmpty(r.Query) ? "" : $" for “{r.Query}”"));
+                          (string.IsNullOrEmpty(r.Query) ? "" : $" for “{Shape(r.Query)}”"));
         }
 
         void AddCard(ParsedContent item)
